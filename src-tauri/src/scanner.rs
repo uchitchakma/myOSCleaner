@@ -18,7 +18,7 @@ pub fn get_dir_size(path: &Path) -> u64 {
     }
     WalkDir::new(path)
         .min_depth(1)
-        .max_depth(8)
+        .max_depth(4)
         .into_iter()
         .filter_map(|e| e.ok())
         .filter_map(|e| e.metadata().ok())

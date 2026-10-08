@@ -21,7 +21,7 @@ import {
 } from './types';
 import * as tauri from './services/tauriService';
 import { formatBytes } from './utils/format';
-import { CheckCircle2, AlertTriangle, Info, X, RefreshCw } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, Info, X } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavTab>('smart-scan');
@@ -37,7 +37,6 @@ export const App: React.FC = () => {
   const [developerProjects, setDeveloperProjects] = useState<DeveloperProjectInfo[]>([]);
 
   // Loading states
-  const [isInitializing, setIsInitializing] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [isCleaning, setIsCleaning] = useState(false);
@@ -56,15 +55,13 @@ export const App: React.FC = () => {
     }, 4000);
   };
 
-  // 1. Instant Initial Load (Only Overview in <20ms)
+  // 1. Instant Initial Load
   const initOverview = async () => {
     try {
       const overview = await tauri.fetchSystemOverview();
       setSystemOverview(overview);
     } catch (err) {
       console.error('Failed to load system overview:', err);
-    } finally {
-      setIsInitializing(false);
     }
   };
 
@@ -355,98 +352,89 @@ export const App: React.FC = () => {
 
         {/* Dynamic Tab Views */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden relative">
-          {isInitializing ? (
-            <div className="flex flex-col items-center justify-center h-full space-y-4 text-slate-400">
-              <RefreshCw className="w-8 h-8 text-blue-400 animate-spin" />
-              <p className="text-xs font-medium">Initializing myOSCleaner...</p>
-            </div>
-          ) : (
-            <>
-              {activeTab === 'smart-scan' && (
-                <SmartScanView
-                  systemOverview={systemOverview}
-                  junkCategories={junkCategories}
-                  onStartScan={handleStartSmartScan}
-                  isScanning={isScanning}
-                  onExecuteClean={handleCleanJunkPaths}
-                  isCleaning={isCleaning}
-                  onNavigateTab={setActiveTab}
-                />
-              )}
+          {activeTab === 'smart-scan' && (
+            <SmartScanView
+              systemOverview={systemOverview}
+              junkCategories={junkCategories}
+              onStartScan={handleStartSmartScan}
+              isScanning={isScanning}
+              onExecuteClean={handleCleanJunkPaths}
+              isCleaning={isCleaning}
+              onNavigateTab={setActiveTab}
+            />
+          )}
 
-              {activeTab === 'system-junk' && (
-                <SystemJunkView
-                  categories={junkCategories}
-                  onCleanSelected={handleCleanJunkPaths}
-                  isCleaning={isCleaning}
-                  onRefresh={() => loadTabData('system-junk')}
-                  isRefreshing={isRefreshing}
-                />
-              )}
+          {activeTab === 'system-junk' && (
+            <SystemJunkView
+              categories={junkCategories}
+              onCleanSelected={handleCleanJunkPaths}
+              isCleaning={isCleaning}
+              onRefresh={() => loadTabData('system-junk')}
+              isRefreshing={isRefreshing}
+            />
+          )}
 
-              {activeTab === 'trash-bins' && (
-                <TrashBinsView
-                  trashItems={trashItems}
-                  onEmptyTrash={handleEmptyTrash}
-                  isEmptying={isCleaning}
-                  onRefresh={() => loadTabData('trash-bins')}
-                  isRefreshing={isRefreshing}
-                  onRevealInFinder={handleRevealInFinder}
-                  onDeleteSingle={(path) => handleCleanJunkPaths([path])}
-                />
-              )}
+          {activeTab === 'trash-bins' && (
+            <TrashBinsView
+              trashItems={trashItems}
+              onEmptyTrash={handleEmptyTrash}
+              isEmptying={isCleaning}
+              onRefresh={() => loadTabData('trash-bins')}
+              isRefreshing={isRefreshing}
+              onRevealInFinder={handleRevealInFinder}
+              onDeleteSingle={(path) => handleCleanJunkPaths([path])}
+            />
+          )}
 
-              {activeTab === 'large-files' && (
-                <LargeFilesView
-                  files={largeFiles}
-                  onDeleteFiles={handleDeleteLargeFiles}
-                  isDeleting={isCleaning}
-                  onRefresh={() => loadTabData('large-files')}
-                  isRefreshing={isRefreshing}
-                  onRevealInFinder={handleRevealInFinder}
-                />
-              )}
+          {activeTab === 'large-files' && (
+            <LargeFilesView
+              files={largeFiles}
+              onDeleteFiles={handleDeleteLargeFiles}
+              isDeleting={isCleaning}
+              onRefresh={() => loadTabData('large-files')}
+              isRefreshing={isRefreshing}
+              onRevealInFinder={handleRevealInFinder}
+            />
+          )}
 
-              {activeTab === 'uninstaller' && (
-                <AppUninstallerView
-                  apps={installedApps}
-                  onUninstall={handleUninstallApp}
-                  onReset={handleResetApp}
-                  isProcessing={isCleaning}
-                  onRefresh={() => loadTabData('uninstaller')}
-                  isRefreshing={isRefreshing}
-                />
-              )}
+          {activeTab === 'uninstaller' && (
+            <AppUninstallerView
+              apps={installedApps}
+              onUninstall={handleUninstallApp}
+              onReset={handleResetApp}
+              isProcessing={isCleaning}
+              onRefresh={() => loadTabData('uninstaller')}
+              isRefreshing={isRefreshing}
+            />
+          )}
 
-              {activeTab === 'developer' && (
-                <DeveloperSpaceView
-                  projects={developerProjects}
-                  onCleanFolders={handleCleanDeveloperFolders}
-                  isCleaning={isCleaning}
-                  onRefresh={() => loadTabData('developer')}
-                  isRefreshing={isRefreshing}
-                  onRevealInFinder={handleRevealInFinder}
-                />
-              )}
+          {activeTab === 'developer' && (
+            <DeveloperSpaceView
+              projects={developerProjects}
+              onCleanFolders={handleCleanDeveloperFolders}
+              isCleaning={isCleaning}
+              onRefresh={() => loadTabData('developer')}
+              isRefreshing={isRefreshing}
+              onRevealInFinder={handleRevealInFinder}
+            />
+          )}
 
-              {activeTab === 'ram-booster' && (
-                <RamBoosterView
-                  systemOverview={systemOverview}
-                  onOptimizeRam={handleOptimizeRam}
-                  isOptimizing={isOptimizingRam}
-                  onRefresh={handleFullRefresh}
-                />
-              )}
+          {activeTab === 'ram-booster' && (
+            <RamBoosterView
+              systemOverview={systemOverview}
+              onOptimizeRam={handleOptimizeRam}
+              isOptimizing={isOptimizingRam}
+              onRefresh={handleFullRefresh}
+            />
+          )}
 
-              {activeTab === 'settings' && (
-                <SettingsView
-                  theme={theme}
-                  setTheme={setTheme}
-                  confirmBeforeClean={confirmBeforeClean}
-                  setConfirmBeforeClean={setConfirmBeforeClean}
-                />
-              )}
-            </>
+          {activeTab === 'settings' && (
+            <SettingsView
+              theme={theme}
+              setTheme={setTheme}
+              confirmBeforeClean={confirmBeforeClean}
+              setConfirmBeforeClean={setConfirmBeforeClean}
+            />
           )}
         </div>
       </main>

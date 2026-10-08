@@ -12,16 +12,15 @@ pub mod commands {
     pub fn get_system_overview() -> SystemOverview {
         let mut sys = System::new_all();
         sys.refresh_all();
-        std::thread::sleep(std::time::Duration::from_millis(80));
         sys.refresh_cpu_all();
 
-        let hostname = System::host_name().unwrap_or_else(|| "MacBook".to_string());
+        let hostname = System::host_name().unwrap_or_else(|| "Host".to_string());
         let os_name = System::name().unwrap_or_else(|| std::env::consts::OS.to_string());
-        let os_version = System::os_version().unwrap_or_else(|| "macOS".to_string());
+        let os_version = System::os_version().unwrap_or_else(|| "Universal".to_string());
         let arch = System::cpu_arch();
 
         let cpus = sys.cpus();
-        let cpu_brand = cpus.first().map(|c| c.brand().to_string()).unwrap_or_else(|| "Apple Silicon / Multi-Core".to_string());
+        let cpu_brand = cpus.first().map(|c| c.brand().to_string()).unwrap_or_else(|| "Multi-Core Processor".to_string());
         let cpu_cores = cpus.len();
         let cpu_usage_percent = sys.global_cpu_usage();
 
@@ -57,7 +56,7 @@ pub mod commands {
                 let used = total.saturating_sub(avail);
                 let pct = (used as f32 / total as f32) * 100.0;
                 disks.push(DiskItem {
-                    name: if name.is_empty() { "Macintosh HD".to_string() } else { name },
+                    name: if name.is_empty() { "System HD".to_string() } else { name },
                     mount_point: mount,
                     total_bytes: total,
                     available_bytes: avail,
@@ -68,12 +67,6 @@ pub mod commands {
                 });
             }
         }
-
-        let home = scanner::get_home_dir();
-        let trash_size = scanner::get_dir_size(&home.join(".Trash"));
-        let caches_size = scanner::get_dir_size(&home.join("Library/Caches"));
-        let logs_size = scanner::get_dir_size(&home.join("Library/Logs"));
-        let estimated_junk = trash_size + (caches_size / 2) + logs_size;
 
         SystemOverview {
             hostname,
@@ -92,8 +85,8 @@ pub mod commands {
             uptime_seconds,
             disks,
             battery: None,
-            trash_size_bytes: trash_size,
-            estimated_junk_bytes: estimated_junk,
+            trash_size_bytes: 0,
+            estimated_junk_bytes: 0,
         }
     }
 
@@ -188,5 +181,5 @@ pub fn run() {
             commands::optimize_ram
         ])
         .run(tauri::generate_context!())
-        .expect("error while running myMacCleaner application");
+        .expect("error while running myOSCleaner application");
 }
