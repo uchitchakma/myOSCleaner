@@ -7,16 +7,31 @@
   **The Ultra-Fast, 3D Glassmorphic Open-Source System Cleaner & Space Optimizer**  
   *Native macOS, Windows & Linux Desktop Application built with Rust & Tauri 2*
 
-  [![Latest Release](https://img.shields.io/github/v/release/uchitchakma/myOSCleaner?label=Download%20myOSCleaner&logo=apple&color=C5453E&style=for-the-badge)](https://github.com/uchitchakma/myOSCleaner/releases/latest)
+  <br />
+
+  <!-- Direct Platform One-Click Download Badges -->
+  <p align="center">
+    <a href="https://github.com/uchitchakma/myOSCleaner/releases/latest">
+      <img src="https://img.shields.io/badge/Download_for_macOS-DMG_(Universal)-000000?style=for-the-badge&logo=apple&logoColor=white" alt="Download macOS DMG" />
+    </a>
+    &nbsp;
+    <a href="https://github.com/uchitchakma/myOSCleaner/releases/latest">
+      <img src="https://img.shields.io/badge/Download_for_Windows-EXE_%2F_MSI-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows EXE" />
+    </a>
+    &nbsp;
+    <a href="https://github.com/uchitchakma/myOSCleaner/releases/latest">
+      <img src="https://img.shields.io/badge/Download_for_Linux-DEB_%2F_AppImage-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Download Linux Package" />
+    </a>
+  </p>
 
   <br />
 
+  [![Latest Release](https://img.shields.io/github/v/release/uchitchakma/myOSCleaner?label=Latest%20Version&color=C5453E&style=flat-square)](https://github.com/uchitchakma/myOSCleaner/releases/latest)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
   [![Built with Rust](https://img.shields.io/badge/Built%20with-Rust-orange.svg?logo=rust&style=flat-square)](https://www.rust-lang.org/)
   [![Tauri 2](https://img.shields.io/badge/Tauri-2.0-24C8D8.svg?logo=tauri&style=flat-square)](https://tauri.app/)
   [![React 18](https://img.shields.io/badge/React-18-61DAFB.svg?logo=react&style=flat-square)](https://reactjs.org/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC.svg?logo=tailwind-css&style=flat-square)](https://tailwindcss.com/)
-  [![Platform: macOS | Windows | Linux](https://img.shields.io/badge/Platforms-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey.svg?style=flat-square)](#-multi-platform-downloads)
 
 </div>
 
@@ -44,15 +59,18 @@
 
 ---
 
-## 📦 Multi-Platform Downloads
+## 📦 1-Click Multi-Platform Downloads
 
-Download the latest version directly from [**GitHub Releases**](https://github.com/uchitchakma/myOSCleaner/releases/latest):
+Click below to download the official installer directly from [**GitHub Releases**](https://github.com/uchitchakma/myOSCleaner/releases/latest):
 
-| Platform | Format | Description |
-| :--- | :--- | :--- |
-| 🍏 **macOS** | [`.dmg`](https://github.com/uchitchakma/myOSCleaner/releases/latest) | Universal Installer (Apple Silicon M1/M2/M3/M4 & Intel) |
-| 🪟 **Windows** | [`.exe` / `.msi`](https://github.com/uchitchakma/myOSCleaner/releases/latest) | 64-bit Windows 10 & 11 Setup |
-| 🐧 **Linux** | [`.deb` / `.AppImage`](https://github.com/uchitchakma/myOSCleaner/releases/latest) | Debian / Ubuntu Package & Standalone AppImage |
+| OS Platform | Direct Download Link | Supported Architecture | Size |
+| :--- | :--- | :--- | :--- |
+| 🍏 **macOS** | [**Download `.dmg` (macOS Universal)**](https://github.com/uchitchakma/myOSCleaner/releases/latest) | Apple Silicon (M1/M2/M3/M4) & Intel (x86_64) | **~6 MB** |
+| 🪟 **Windows** | [**Download `.exe` / `.msi` (Windows 64-bit)**](https://github.com/uchitchakma/myOSCleaner/releases/latest) | Windows 10 & Windows 11 (x64) | **~5 MB** |
+| 🐧 **Linux** | [**Download `.deb` / `.AppImage` (Linux)**](https://github.com/uchitchakma/myOSCleaner/releases/latest) | Ubuntu, Debian, Fedora, Arch & Generic Linux | **~6 MB** |
+
+> [!TIP]
+> **Zero Installation (Portable macOS)**: You can also download the pre-compiled standalone `myOSCleaner.app` directly from the release page.
 
 ---
 
