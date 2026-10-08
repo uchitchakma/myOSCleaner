@@ -1,18 +1,18 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "myMacCleaner",
+  "productName": "myOSCleaner",
   "version": "1.0.0",
-  "identifier": "com.ucdreams.mymaccleaner",
+  "identifier": "com.ucdreams.myoscleaner",
   "build": {
-    "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build",
+    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "bun run build",
     "devUrl": "http://localhost:1421",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "myMacCleaner | Smart System Cleaner & Space Optimizer",
+        "title": "myOSCleaner | Universal Smart System Cleaner & Space Optimizer",
         "width": 1180,
         "height": 780,
         "minWidth": 940,
@@ -37,8 +37,8 @@
       "icons/icon.ico"
     ],
     "category": "Utility",
-    "shortDescription": "Universal cross-platform Mac & PC cleaner, memory booster and disk space manager.",
-    "longDescription": "myMacCleaner is an open-source, ultra-fast system cleaner and space optimizer built with Rust and Tauri by Uchit Chakma.",
+    "shortDescription": "Universal cross-platform Mac, Windows & Linux cleaner, memory booster and disk space manager.",
+    "longDescription": "myOSCleaner is an open-source, ultra-fast cross-platform system cleaner and space optimizer built with Rust and Tauri by Uchit Chakma.",
     "copyright": "Copyright © 2026 Uchit Chakma & UCDREAMS TECHNOLOGIES LLP. All rights reserved.",
     "macOS": {
       "frameworks": [],

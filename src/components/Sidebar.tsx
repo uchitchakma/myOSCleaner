@@ -93,10 +93,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h1 className="font-bold text-base tracking-tight text-white font-sans">myMacCleaner</h1>
+              <h1 className="font-bold text-base tracking-tight text-white font-sans">myOSCleaner</h1>
               <span className="text-[10px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">PRO</span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Smart Space Optimizer</p>
+            <p className="text-[11px] text-slate-400 font-medium">Universal Space Optimizer</p>
           </div>
         </div>
 

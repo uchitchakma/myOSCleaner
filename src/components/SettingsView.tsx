@@ -115,7 +115,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 <GitBranch className="w-5 h-5 text-indigo-400" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">myMacCleaner is 100% Free & Open Source</h4>
+                <h4 className="text-sm font-bold text-white">myOSCleaner is 100% Free & Open Source</h4>
                 <p className="text-xs text-slate-400">Built with Rust, Tauri 2, React & Tailwind CSS</p>
               </div>
             </div>

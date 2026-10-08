@@ -1,5 +1,5 @@
-# myMacCleaner 🚀
-> **The Modern, Ultra-Fast, Open-Source CleanMyMac Alternative for macOS, Linux, and Windows.**  
+# myOSCleaner 🚀
+> **The Modern, Ultra-Fast, Open-Source CleanMyMac & Universal PC Cleaner for macOS, Linux, and Windows.**  
 > Built with **Rust**, **Tauri 2**, **React**, and **Tailwind CSS**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
@@ -12,7 +12,7 @@
 
 ## 🌟 Overview
 
-**myMacCleaner** is a blazing-fast, lightweight, and completely open-source desktop system cleaner and space manager designed with simplicity and visual elegance in mind. Inspired by CleanMyMac, it delivers a 1-click **Smart Scan** experience along with deep granular cleaning modules designed to be intuitive and beginner-friendly ("dumb-proof" UX) while offering extreme speed and safety powered by Rust.
+**myOSCleaner** is a blazing-fast, lightweight, and completely open-source cross-platform desktop system cleaner and space manager designed with simplicity and visual elegance in mind. Inspired by CleanMyMac, it delivers a 1-click **Smart Scan** experience along with deep granular cleaning modules designed to be intuitive and beginner-friendly ("dumb-proof" UX) while offering extreme speed and safety powered by Rust.
 
 ---
 

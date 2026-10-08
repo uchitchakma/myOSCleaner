@@ -1,12 +1,12 @@
 [package]
-name = "mymaccleaner"
+name = "myoscleaner"
 version = "1.0.0"
-description = "Universal Cross-Platform System Cleaner, Memory Optimizer & Space Management Suite"
+description = "Universal Cross-Platform System Cleaner, Memory Optimizer & Space Management Suite for macOS, Windows & Linux"
 authors = ["Uchit Chakma <uchitchakma.com>", "UCDREAMS TECHNOLOGIES LLP <ucdreams.com>"]
 edition = "2021"
 
 [lib]
-name = "mymaccleaner_lib"
+name = "myoscleaner_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
