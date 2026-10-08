@@ -64,29 +64,37 @@ export const App: React.FC = () => {
     }
   };
 
-  // 2. On-Demand Scan per Tab
+  // 2. Fast Non-Blocking On-Demand Scan per Tab
   const scanTab = useCallback(async (tab: NavTab) => {
+    // 1. Immediately activate scanning state so Progress Hub renders at 0ms
     setScanningTabs((prev) => new Set(prev).add(tab));
+    
+    // Give React 1 tick to paint the Glass Progress Hub immediately
+    await new Promise((r) => setTimeout(r, 40));
+
+    const startTime = Date.now();
+    let scanPromise: Promise<any>;
+
+    if (tab === 'system-junk' || tab === 'smart-scan') {
+      scanPromise = tauri.fetchSystemJunk().then(setJunkCategories);
+    } else if (tab === 'trash-bins') {
+      scanPromise = tauri.fetchTrashBin().then(setTrashItems);
+    } else if (tab === 'large-files') {
+      scanPromise = tauri.fetchLargeFiles(25).then(setLargeFiles);
+    } else if (tab === 'uninstaller') {
+      scanPromise = tauri.fetchInstalledApplications().then(setInstalledApps);
+    } else if (tab === 'developer') {
+      scanPromise = tauri.fetchDeveloperProjects().then(setDeveloperProjects);
+    } else {
+      scanPromise = Promise.resolve();
+    }
+
     try {
-      if (tab === 'system-junk' || tab === 'smart-scan') {
-        const junk = await tauri.fetchSystemJunk();
-        setJunkCategories(junk);
-      }
-      if (tab === 'trash-bins') {
-        const trash = await tauri.fetchTrashBin();
-        setTrashItems(trash);
-      }
-      if (tab === 'large-files') {
-        const files = await tauri.fetchLargeFiles(25);
-        setLargeFiles(files);
-      }
-      if (tab === 'uninstaller') {
-        const apps = await tauri.fetchInstalledApplications();
-        setInstalledApps(apps);
-      }
-      if (tab === 'developer') {
-        const dev = await tauri.fetchDeveloperProjects();
-        setDeveloperProjects(dev);
+      await scanPromise;
+      // Guarantee smooth visual progress animation for at least 700ms
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 750) {
+        await new Promise((r) => setTimeout(r, 750 - elapsed));
       }
       setScannedTabs((prev) => new Set(prev).add(tab));
     } catch (err) {
@@ -138,6 +146,7 @@ export const App: React.FC = () => {
   // Smart Scan (Scans all modules in parallel on-demand)
   const handleStartSmartScan = async () => {
     setIsScanningAll(true);
+    const startTime = Date.now();
     try {
       const [overview, junk, trash, files, apps, dev] = await Promise.all([
         tauri.fetchSystemOverview(),
@@ -147,6 +156,11 @@ export const App: React.FC = () => {
         tauri.fetchInstalledApplications(),
         tauri.fetchDeveloperProjects(),
       ]);
+
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 850) {
+        await new Promise((r) => setTimeout(r, 850 - elapsed));
+      }
 
       setSystemOverview(overview);
       setJunkCategories(junk);

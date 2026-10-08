@@ -87,28 +87,29 @@ export const GlassScanningHub: React.FC<GlassScanningHubProps> = ({
   subtitle,
   category,
 }) => {
-  const [progress, setProgress] = useState(12);
+  const [progress, setProgress] = useState(15);
   const [currentPathIndex, setCurrentPathIndex] = useState(0);
-  const [itemsFoundCount, setItemsFoundCount] = useState(24);
+  const [itemsFoundCount, setItemsFoundCount] = useState(38);
 
   const paths = CATEGORY_PATHS[category] || CATEGORY_PATHS['system-junk'];
   const Icon = CATEGORY_ICONS[category] || Sparkles;
 
   useEffect(() => {
-    // Progress bar smooth ramping
+    // Fast & smooth 3D progress bar liquid fill
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 94) return prev;
-        const increment = Math.max(1, Math.floor((95 - prev) / 8));
-        return Math.min(95, prev + increment);
+        if (prev >= 96) return prev;
+        const remaining = 97 - prev;
+        const step = Math.max(1, Math.ceil(remaining / 5));
+        return Math.min(97, prev + step);
       });
-    }, 180);
+    }, 70);
 
-    // Fast file path streaming
+    // High-speed file path streaming ticker
     const pathInterval = setInterval(() => {
       setCurrentPathIndex((prev) => (prev + 1) % paths.length);
-      setItemsFoundCount((prev) => prev + Math.floor(Math.random() * 5 + 3));
-    }, 220);
+      setItemsFoundCount((prev) => prev + Math.floor(Math.random() * 8 + 4));
+    }, 130);
 
     return () => {
       clearInterval(progressInterval);
