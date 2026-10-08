@@ -37,7 +37,6 @@ const CATEGORY_PATHS: Record<string, string[]> = {
     '~/.Trash/Obsolete_Downloads_Oct',
     '/Volumes/ExternalSSD/.Trashes/501/Backup_Nov',
     '~/.Trash/Xcode_Simulator_Logs.tar.gz',
-    '~/.Trash/Video_Export_Final.mov',
   ],
   'large-files': [
     '~/Downloads/macOS_Sonoma_Installer.dmg (12.4 GB)',
@@ -118,62 +117,60 @@ export const GlassScanningHub: React.FC<GlassScanningHubProps> = ({
   }, [paths.length]);
 
   return (
-    <div className="p-8 max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] animate-fadeIn">
-      {/* 3D Glass Morphic Container */}
-      <div className="w-full max-w-2xl relative rounded-3xl p-8 sm:p-10 backdrop-blur-2xl bg-white/75 dark:bg-[#111728]/80 border border-white/60 dark:border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.6)] overflow-hidden">
-        {/* Specular Top-Edge Glass Sheen */}
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent" />
-        <div className="absolute -top-24 -left-24 w-60 h-60 rounded-full bg-[#C5453E]/20 blur-3xl -z-10 pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-60 h-60 rounded-full bg-rose-500/15 blur-3xl -z-10 pointer-events-none" />
+    <div className="p-8 max-w-3xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] animate-fadeIn">
+      {/* Seamless Floating Scanning Hub (No Boxed Container Background) */}
+      <div className="w-full max-w-xl flex flex-col items-center text-center space-y-7 relative">
+        {/* Ambient Neon Backlights */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-[#C5453E]/15 blur-3xl -z-10 pointer-events-none" />
 
         {/* Top 3D Scanner Orb */}
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative flex items-center justify-center">
             {/* Pulsing orbital rings */}
-            <div className="absolute w-28 h-28 rounded-full border border-[#C5453E]/30 dark:border-[#C5453E]/40 animate-ping opacity-40" />
+            <div className="absolute w-28 h-28 rounded-full border border-[#C5453E]/30 dark:border-[#C5453E]/40 animate-ping opacity-30" />
             <div className="absolute w-24 h-24 rounded-full border border-dashed border-[#C5453E]/50 animate-spin" style={{ animationDuration: '8s' }} />
 
             {/* 3D Glossy Icon Badge */}
-            <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-b from-[#db554e] via-[#C5453E] to-[#9b2c27] p-[1px] shadow-[0_12px_28px_rgba(197,69,62,0.45)] ring-1 ring-white/30">
-              <div className="w-full h-full rounded-2xl bg-gradient-to-b from-white/25 via-transparent to-black/20 flex items-center justify-center">
+            <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-b from-[#e55c54] via-[#C5453E] to-[#922621] p-[1.5px] shadow-[0_12px_28px_rgba(197,69,62,0.45)] ring-1 ring-white/40">
+              <div className="w-full h-full rounded-2xl bg-gradient-to-b from-white/30 via-transparent to-black/20 flex items-center justify-center relative overflow-hidden">
                 <Icon className="w-9 h-9 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] animate-pulse" />
+                {/* Top specular cap */}
+                <div className="absolute inset-x-1.5 top-0.5 h-3 rounded-full bg-gradient-to-b from-white/70 to-transparent opacity-90" />
               </div>
-              {/* Specular gloss cap on the icon badge */}
-              <div className="absolute inset-x-2 top-1 h-3 rounded-full bg-gradient-to-b from-white/60 to-transparent opacity-80 pointer-events-none" />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5453E]/10 dark:bg-[#C5453E]/20 border border-[#C5453E]/30 text-[#C5453E] text-[11px] font-bold tracking-wider uppercase">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#C5453E]/10 dark:bg-[#C5453E]/20 border border-[#C5453E]/30 text-[#C5453E] text-[11px] font-extrabold tracking-wider uppercase shadow-xs">
               <Search className="w-3 h-3 animate-bounce" />
               <span>Scanning in Progress</span>
             </div>
-            <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight pt-1">
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight pt-0.5">
               {title}
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
               {subtitle}
             </p>
           </div>
         </div>
 
         {/* 3D Liquid Glossy Progress Bar */}
-        <div className="mt-8 space-y-3">
-          <div className="flex justify-between items-center text-xs font-semibold">
+        <div className="w-full space-y-2.5">
+          <div className="flex justify-between items-center text-xs font-semibold px-1">
             <span className="text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#C5453E]" />
               Deep Disk Analysis
             </span>
-            <span className="text-base font-extrabold text-[#C5453E] font-mono tracking-tight">
+            <span className="text-base font-black text-[#C5453E] font-mono tracking-tight">
               {progress}%
             </span>
           </div>
 
           {/* Recessed Track with Inset Shadow */}
-          <div className="relative w-full h-4 rounded-full bg-slate-200/80 dark:bg-slate-900/80 p-[2px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.25)] border border-slate-300/60 dark:border-white/10 overflow-hidden">
+          <div className="relative w-full h-3.5 rounded-full bg-slate-200/90 dark:bg-slate-900/90 p-[2px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.25)] border border-slate-300/70 dark:border-white/10 overflow-hidden">
             {/* 3D Liquid Fill */}
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#C5453E] via-[#e56058] to-[#C5453E] relative transition-all duration-300 ease-out shadow-[0_0_15px_rgba(197,69,62,0.6)]"
+              className="h-full rounded-full bg-gradient-to-r from-[#C5453E] via-[#e56058] to-[#C5453E] relative transition-all duration-200 ease-out shadow-[0_0_15px_rgba(197,69,62,0.6)]"
               style={{ width: `${progress}%` }}
             >
               {/* Gloss Highlight on the top half of the bar */}
@@ -186,11 +183,11 @@ export const GlassScanningHub: React.FC<GlassScanningHubProps> = ({
         </div>
 
         {/* Live Scanned File Path Stream Terminal Pill */}
-        <div className="mt-6 p-3.5 rounded-2xl bg-slate-100/90 dark:bg-slate-950/70 border border-slate-200 dark:border-white/10 flex items-center gap-3 backdrop-blur-sm shadow-inner">
-          <div className="p-2 rounded-xl bg-white dark:bg-slate-800 text-[#C5453E] shadow-sm shrink-0">
+        <div className="w-full p-3 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/80 dark:border-white/10 flex items-center gap-3 backdrop-blur-md shadow-sm">
+          <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-[#C5453E] shadow-xs shrink-0">
             <FileCode className="w-4 h-4" />
           </div>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 text-left">
             <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 tracking-wider">
               Currently Inspecting
             </p>
