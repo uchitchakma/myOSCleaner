@@ -63,10 +63,9 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6 animate-fadeIn pb-12">
       {/* Top Main Boost 3D Glass Card */}
-      <div className="glass-panel rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl relative overflow-hidden">
+      <div className="glass-panel rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl relative isolate overflow-hidden">
         {/* Glow ambient */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#C5453E]/15 blur-3xl -z-10 rounded-full pointer-events-none" />
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#C5453E]/10 via-transparent to-transparent pointer-events-none rounded-3xl" />
 
         {/* Left Side: RAM Usage Donut Gauge */}
         <div className="flex flex-col sm:flex-row items-center gap-6">

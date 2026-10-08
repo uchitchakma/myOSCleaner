@@ -65,9 +65,8 @@ export const TrashBinsView: React.FC<TrashBinsViewProps> = ({
   if (!hasScanned && trashItems.length === 0) {
     return (
       <div className="p-8 max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] space-y-6 text-center animate-fadeIn">
-        <div className="w-full max-w-lg glass-panel rounded-3xl p-8 flex flex-col items-center text-center space-y-5 relative overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent" />
-          <div className="absolute -top-16 -left-16 w-40 h-40 rounded-full bg-amber-500/20 blur-2xl -z-10" />
+        <div className="w-full max-w-lg glass-panel rounded-3xl p-8 flex flex-col items-center text-center space-y-5 relative isolate overflow-hidden shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-transparent pointer-events-none rounded-3xl" />
 
           {/* 3D Glossy Icon Badge */}
           <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-b from-amber-400 via-amber-500 to-orange-600 p-[1px] shadow-[0_12px_28px_rgba(245,158,11,0.4)] ring-1 ring-white/30">
@@ -108,8 +107,7 @@ export const TrashBinsView: React.FC<TrashBinsViewProps> = ({
       {/* Top Banner & Action Card */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Trash Overview Card */}
-        <div className="md:col-span-2 glass-panel rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+        <div className="md:col-span-2 glass-panel rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm relative isolate overflow-hidden">
           
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-b from-[#db554e] via-[#C5453E] to-amber-600 flex items-center justify-center shadow-lg shadow-[#C5453E]/25 text-white shrink-0 p-[1px] ring-1 ring-white/30">

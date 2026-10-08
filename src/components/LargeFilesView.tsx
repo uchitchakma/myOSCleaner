@@ -136,9 +136,8 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
   if (!hasScanned && files.length === 0) {
     return (
       <div className="p-8 max-w-4xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-6rem)] space-y-6 text-center animate-fadeIn">
-        <div className="w-full max-w-lg glass-panel rounded-3xl p-8 flex flex-col items-center text-center space-y-5 relative overflow-hidden">
-          <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent" />
-          <div className="absolute -top-16 -left-16 w-40 h-40 rounded-full bg-purple-500/20 blur-2xl -z-10" />
+        <div className="w-full max-w-lg glass-panel rounded-3xl p-8 flex flex-col items-center text-center space-y-5 relative isolate overflow-hidden shadow-2xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent pointer-events-none rounded-3xl" />
 
           {/* 3D Glossy Icon Badge */}
           <div className="relative w-20 h-20 rounded-3xl bg-gradient-to-b from-purple-400 via-purple-500 to-indigo-600 p-[1px] shadow-[0_12px_28px_rgba(168,85,247,0.4)] ring-1 ring-white/30">
@@ -205,9 +204,7 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6 animate-fadeIn pb-12">
       {/* Top Action Bar */}
-      <div className="glass-panel flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl shadow-sm relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
-
+      <div className="glass-panel flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl shadow-sm relative isolate overflow-hidden">
         <div className="flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-purple-400 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-purple-500/25 p-[1px]">
             <FolderArchive className="w-5 h-5 drop-shadow-sm" />

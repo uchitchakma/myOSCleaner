@@ -28,8 +28,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6 animate-fadeIn pb-12">
       {/* Top Banner */}
-      <div className="glass-panel p-5 rounded-3xl flex items-center gap-3.5 shadow-sm relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+      <div className="glass-panel p-5 rounded-3xl flex items-center gap-3.5 shadow-sm relative isolate overflow-hidden">
 
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-b from-[#db554e] via-[#C5453E] to-[#9b2c27] text-white shadow-md shadow-[#C5453E]/25 flex items-center justify-center shrink-0 p-[1px] ring-1 ring-white/30">
           <SettingsIcon className="w-6 h-6 drop-shadow-sm" />
@@ -165,8 +164,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Open Source & Community Card */}
-        <div className="glass-panel rounded-3xl p-6 space-y-4 shadow-sm border border-[#C5453E]/20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-60 h-60 bg-[#C5453E]/10 blur-3xl -z-10 pointer-events-none rounded-full" />
+        <div className="glass-panel rounded-3xl p-6 space-y-4 shadow-sm border border-[#C5453E]/20 relative isolate overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#C5453E]/5 via-transparent to-transparent pointer-events-none rounded-3xl" />
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">

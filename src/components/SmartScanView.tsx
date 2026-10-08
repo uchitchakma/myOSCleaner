@@ -291,9 +291,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 1: System Junk & Caches */}
         <div
           onClick={() => onNavigateTab('system-junk')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
         >
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#db554e] to-[#C5453E] text-white flex items-center justify-center shadow-md shadow-[#C5453E]/30 group-hover:scale-105 transition-transform p-[1px]">
@@ -320,9 +319,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 2: Developer Caches */}
         <div
           onClick={() => onNavigateTab('developer')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
         >
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-rose-500 to-pink-600 text-white flex items-center justify-center shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform p-[1px]">
@@ -349,9 +347,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 3: Trash Bins */}
         <div
           onClick={() => onNavigateTab('trash-bins')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
         >
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 to-orange-600 text-white flex items-center justify-center shadow-md shadow-amber-500/25 group-hover:scale-105 transition-transform p-[1px]">
@@ -406,9 +403,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
               return (
                 <div
                   key={`${d.mount_point}-${idx}`}
-                  className="glass-panel rounded-2xl p-4 flex flex-col justify-between gap-3 text-xs shadow-sm relative overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
+                  className="glass-panel rounded-2xl p-4 flex flex-col justify-between gap-3 text-xs shadow-sm relative isolate overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
                 >
-                  <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
 
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
