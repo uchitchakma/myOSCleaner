@@ -24,8 +24,12 @@ import { formatBytes } from './utils/format';
 import { CheckCircle2, AlertTriangle, Info, X } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<NavTab>('smart-scan');
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTab = (urlParams.get('tab') as NavTab) || 'smart-scan';
+  const initialTheme = (urlParams.get('theme') as 'dark' | 'light') || 'dark';
+
+  const [activeTab, setActiveTab] = useState<NavTab>(initialTab);
+  const [theme, setTheme] = useState<'dark' | 'light'>(initialTheme);
   const [confirmBeforeClean, setConfirmBeforeClean] = useState(true);
 
   // Core system data
@@ -114,6 +118,9 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     initOverview();
+    if (initialTab !== 'smart-scan') {
+      scanTab(initialTab);
+    }
 
     // Fast RAM & CPU hardware monitor refresh interval
     const interval = setInterval(async () => {

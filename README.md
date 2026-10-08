@@ -41,13 +41,23 @@
 
 <div align="center">
 
-### 🔮 1-Click Smart Clean & Real-Time Storage Diagnostics
-<img src="screenshots/smart-scan-overview.jpg" alt="myOSCleaner Smart Scan Overview" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.25);" />
+### 🔮 1-Click Smart Clean & Real-Time Storage Diagnostics (Dark Mode)
+<img src="screenshots/smart-scan-dark.png" alt="myOSCleaner Smart Scan Dark Mode" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.4);" />
 
 <br /><br />
 
-### 📦 Large & Old Files Explorer with Multi-Drive Filtering
-<img src="screenshots/large-files-explorer.jpg" alt="myOSCleaner Large Files Explorer" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.25);" />
+### ⚡ Memory Booster & Real-Time Hardware Performance Gauge
+<img src="screenshots/ram-booster-dark.png" alt="myOSCleaner Memory Booster & Hardware Diagnostics" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.4);" />
+
+<br /><br />
+
+### 📦 Large & Old Files Explorer with Multi-Drive Categorization
+<img src="screenshots/large-files-dark.png" alt="myOSCleaner Large Files Explorer" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.4);" />
+
+<br /><br />
+
+### ☀️ Clean Light Mode Interface Showcase
+<img src="screenshots/smart-scan-light.png" alt="myOSCleaner Smart Scan Light Mode" width="95%" style="border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.15);" />
 
 </div>
 
