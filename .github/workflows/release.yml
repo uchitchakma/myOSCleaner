@@ -1,0 +1,68 @@
+name: 'Release myOSCleaner Multi-Platform'
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # 1. macOS (Apple Silicon + Intel Universal)
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
+          
+          # 2. Windows 10/11 (x64 EXE & MSI)
+          - platform: 'windows-latest'
+            args: ''
+
+          # 3. Linux (Ubuntu / Debian DEB & AppImage)
+          - platform: 'ubuntu-22.04'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Setup Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'universal-apple-darwin,aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Install Linux system dependencies (Ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libjavascriptcoregtk-4.1-dev
+
+      - name: Install frontend dependencies
+        run: bun install
+
+      - name: Build Tauri Desktop Apps & Publish to GitHub Releases
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'myOSCleaner ${{ github.ref_name }}'
+          releaseBody: |
+            ## 🚀 myOSCleaner Release ${{ github.ref_name }}
+            Universal Smart System Cleaner, Memory Booster & Disk Space Optimizer.
+            
+            ### 📦 Downloads:
+            - **macOS**: `.dmg` (Universal for Apple Silicon & Intel)
+            - **Windows**: `.msi` / `.exe` installer (64-bit)
+            - **Linux**: `.deb` package & standalone `.AppImage`
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
