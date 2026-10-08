@@ -31,6 +31,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Remove pnpm-lock if present
+        run: rm -f pnpm-lock.yaml
+        shell: bash
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
