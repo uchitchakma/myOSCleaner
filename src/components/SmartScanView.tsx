@@ -133,9 +133,6 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
             className="group cursor-pointer relative w-68 h-68 sm:w-72 sm:h-72 rounded-full p-2.5 glass-orb-outer flex items-center justify-center transition-all duration-500 hover:scale-105 active:scale-95"
             title={scanState === 'idle' ? 'Click to Start Smart Scan' : scanState === 'scanned' ? 'Click to Clean Now' : 'Click to Scan Again'}
           >
-            {/* Top Bevel Specular Sheen */}
-            <div className="absolute inset-x-6 top-1.5 h-6 rounded-full bg-gradient-to-b from-white/80 dark:from-white/30 to-transparent pointer-events-none z-20" />
-
             {/* Rotating Cleaning Spinner Ring */}
             {isCleaning && (
               <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#C5453E] border-r-rose-400 border-b-orange-400 animate-spin z-20" />
@@ -143,8 +140,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
 
             {/* Layer 4: Deep Optical Glass Sphere (Core Lens) */}
             <div className="w-full h-full rounded-full glass-orb-inner flex flex-col items-center justify-center p-6 text-center relative overflow-hidden shadow-2xl">
-              {/* Glossy Dome Specular Arc Highlight */}
-              <div className="absolute inset-x-4 top-2 h-24 rounded-full bg-gradient-to-b from-white/70 dark:from-white/15 via-white/20 dark:via-white/5 to-transparent pointer-events-none z-10" />
+              {/* Glossy Dome Spherical Specular Arc */}
+              <div className="absolute top-0 inset-x-0 h-1/2 rounded-t-full bg-gradient-to-b from-white/25 dark:from-white/10 to-transparent pointer-events-none z-10" />
 
               {/* Shimmer Light Sweep on Hover */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none z-10" />
