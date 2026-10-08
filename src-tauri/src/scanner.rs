@@ -357,13 +357,83 @@ fn scan_crash_reports(home: &Path) -> CleanCategory {
     }
 }
 
-fn scan_trash_category(home: &Path) -> CleanCategory {
-    let mut items = Vec::new();
+#[cfg(target_os = "macos")]
+pub fn scan_macos_trash_via_finder() -> Vec<CleanItem> {
+    let script = r#"
+var finder = Application("Finder");
+var items = finder.trash.items();
+var list = [];
+for (var i = 0; i < items.length; i++) {
+  try {
+    var it = items[i];
+    var n = it.name();
+    var s = it.size() || 0;
+    var k = it.kind() || "";
+    var m = it.modificationDate();
+    var ts = m ? Math.floor(m.getTime() / 1000) : 0;
+    var u = "";
+    try { u = it.url(); } catch(e) {}
+    var p = (u && u.indexOf("file://") === 0) ? decodeURIComponent(u.replace("file://", "")) : ("/Users/" + ($.NSUserName().js) + "/.Trash/" + n);
+    list.push({
+      name: n,
+      size: s,
+      path: p,
+      mtime: ts,
+      is_dir: k === "Folder" || k.indexOf("folder") >= 0 || k.indexOf("Directory") >= 0
+    });
+  } catch(e) {}
+}
+JSON.stringify(list);
+"#;
+
+    if let Ok(output) = std::process::Command::new("osascript")
+        .arg("-l")
+        .arg("JavaScript")
+        .arg("-e")
+        .arg(script)
+        .output()
+    {
+        if output.status.success() {
+            if let Ok(text) = String::from_utf8(output.stdout) {
+                if let Ok(parsed) = serde_json::from_str::<Vec<serde_json::Value>>(&text) {
+                    let mut items = Vec::new();
+                    for val in parsed {
+                        let name = val["name"].as_str().unwrap_or("Discarded Item").to_string();
+                        let path = val["path"].as_str().unwrap_or("").to_string();
+                        let size = val["size"].as_u64().unwrap_or(0);
+                        let mtime = val["mtime"].as_u64().unwrap_or(0);
+                        let is_dir = val["is_dir"].as_bool().unwrap_or(false);
+
+                        items.push(CleanItem {
+                            id: format!("trash-{}", name),
+                            path: if path.is_empty() { format!("~/.Trash/{}", name) } else { path },
+                            name,
+                            size_bytes: size,
+                            selected_by_default: true,
+                            category: "trash".to_string(),
+                            description: "Discarded file in macOS Trash".to_string(),
+                            last_modified: mtime,
+                            is_directory: is_dir,
+                        });
+                    }
+                    items.sort_by(|a, b| b.size_bytes.cmp(&a.size_bytes));
+                    return items;
+                }
+            }
+        }
+    }
+    Vec::new()
+}
+
+pub fn scan_trash_items() -> Vec<CleanItem> {
+    let home = get_home_dir();
     let trash_dir = home.join(".Trash");
+    let mut items = Vec::new();
+
     if trash_dir.exists() {
         if let Ok(entries) = fs::read_dir(&trash_dir) {
             let valid_entries: Vec<_> = entries.flatten().collect();
-            let sub_items: Vec<CleanItem> = valid_entries
+            items = valid_entries
                 .par_iter()
                 .map(|entry| {
                     let path = entry.path();
@@ -377,17 +447,27 @@ fn scan_trash_category(home: &Path) -> CleanCategory {
                         size_bytes: size,
                         selected_by_default: true,
                         category: "trash".to_string(),
-                        description: "Item currently sitting in your Trash bin.".to_string(),
+                        description: "Discarded file in Trash".to_string(),
                         last_modified: mtime,
                         is_directory: path.is_dir(),
                     }
                 })
                 .collect();
-            items.extend(sub_items);
         }
     }
 
+    // On macOS: if direct POSIX reading was restricted by TCC Sandbox, fallback to native Finder API
+    #[cfg(target_os = "macos")]
+    if items.is_empty() {
+        items = scan_macos_trash_via_finder();
+    }
+
     items.sort_by(|a, b| b.size_bytes.cmp(&a.size_bytes));
+    items
+}
+
+fn scan_trash_category(_home: &Path) -> CleanCategory {
+    let items = scan_trash_items();
     let total_bytes = items.iter().map(|i| i.size_bytes).sum();
     let count = items.len();
     CleanCategory {
@@ -424,40 +504,6 @@ pub fn scan_system_junk() -> Vec<CleanCategory> {
     );
 
     vec![cat1, cat2, cat3, cat4, cat5, cat6]
-}
-
-pub fn scan_trash_items() -> Vec<CleanItem> {
-    let home = get_home_dir();
-    let trash_dir = home.join(".Trash");
-    let mut items = Vec::new();
-
-    if trash_dir.exists() {
-        if let Ok(entries) = fs::read_dir(&trash_dir) {
-            let valid_entries: Vec<_> = entries.flatten().collect();
-            items = valid_entries
-                .par_iter()
-                .map(|entry| {
-                    let path = entry.path();
-                    let name = entry.file_name().to_string_lossy().to_string();
-                    let size = get_dir_size_fast(&path, 3, 1000);
-                    let mtime = get_file_modified_time(&path);
-                    CleanItem {
-                        id: format!("trash-{}", path.to_string_lossy()),
-                        path: path.to_string_lossy().to_string(),
-                        name,
-                        size_bytes: size,
-                        selected_by_default: true,
-                        category: "trash".to_string(),
-                        description: "Discarded file in Trash".to_string(),
-                        last_modified: mtime,
-                        is_directory: path.is_dir(),
-                    }
-                })
-                .collect();
-        }
-    }
-    items.sort_by(|a, b| b.size_bytes.cmp(&a.size_bytes));
-    items
 }
 
 pub fn scan_large_files(min_size_mb: u64) -> Vec<LargeFileInfo> {
