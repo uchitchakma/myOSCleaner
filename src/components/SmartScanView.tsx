@@ -286,31 +286,45 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         </div>
       </div>
 
-      {/* Breakdown Cards Section */}
+      {/* Breakdown Cards Section - 3D Glassmorphic Cards */}
       <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Card 1: System Junk & Caches */}
         <div
           onClick={() => onNavigateTab('system-junk')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
+          className="glass-panel rounded-3xl p-5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 hover:-translate-y-1 hover:shadow-[0_16px_36px_rgba(197,69,62,0.18)] hover:border-[#C5453E]/50"
         >
-          <div className="flex items-start justify-between mb-3">
+          {/* Top Glass Specular Shine */}
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-[#C5453E]/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+          <div className="flex items-start justify-between mb-4 relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#db554e] to-[#C5453E] text-white flex items-center justify-center shadow-md shadow-[#C5453E]/30 group-hover:scale-105 transition-transform p-[1px]">
-                <Layers className="w-5 h-5 drop-shadow-sm" />
+              {/* 3D Glossy Icon Squircle */}
+              <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-110 shrink-0 overflow-hidden border border-white/35 dark:border-white/20 bg-gradient-to-b from-[#ff635b] via-[#C5453E] to-[#93201b] shadow-[0_6px_18px_rgba(197,69,62,0.4),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)]">
+                {/* Top Specular Gloss Highlight */}
+                <div className="absolute inset-x-1.5 top-0.5 h-4 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                {/* Bottom Caustic Reflex */}
+                <div className="absolute inset-x-1.5 bottom-0.5 h-1.5 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                <Layers className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
+                <h4 className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
                   System Caches & Logs
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Temporary app buffers</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Temporary app buffers</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+
+            {/* 3D Glossy Arrow Button */}
+            <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-white/60 dark:bg-white/5 border border-white/40 dark:border-white/10 group-hover:bg-[#C5453E] group-hover:text-white group-hover:border-[#C5453E]/40 group-hover:shadow-[0_4px_12px_rgba(197,69,62,0.4)] transition-all duration-300">
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+            </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-            <span className="text-slate-500 dark:text-slate-400">Found:</span>
-            <span className="font-extrabold text-slate-900 dark:text-white">
+          <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between text-xs relative z-10">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
+            <span className="font-mono font-extrabold text-slate-900 dark:text-white px-2 py-0.5 rounded-lg bg-slate-100/80 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 shadow-xs">
               {formatBytes(junkCategories.find((c) => c.id === 'system_caches')?.total_bytes || 0)}
             </span>
           </div>
@@ -319,26 +333,40 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 2: Developer Caches */}
         <div
           onClick={() => onNavigateTab('developer')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
+          className="glass-panel rounded-3xl p-5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 hover:-translate-y-1 hover:shadow-[0_16px_36px_rgba(236,72,153,0.18)] hover:border-pink-500/50"
         >
-          <div className="flex items-start justify-between mb-3">
+          {/* Top Glass Specular Shine */}
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-pink-500/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+          <div className="flex items-start justify-between mb-4 relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-rose-500 to-pink-600 text-white flex items-center justify-center shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform p-[1px]">
-                <Code2 className="w-5 h-5 drop-shadow-sm" />
+              {/* 3D Glossy Icon Squircle */}
+              <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-110 shrink-0 overflow-hidden border border-white/35 dark:border-white/20 bg-gradient-to-b from-fuchsia-400 via-pink-500 to-rose-700 shadow-[0_6px_18px_rgba(236,72,153,0.4),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)]">
+                {/* Top Specular Gloss Highlight */}
+                <div className="absolute inset-x-1.5 top-0.5 h-4 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                {/* Bottom Caustic Reflex */}
+                <div className="absolute inset-x-1.5 bottom-0.5 h-1.5 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                <Code2 className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
+                <h4 className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-pink-500 transition-colors">
                   Developer Caches
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Xcode, Gradle, NPM & Cargo</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Xcode, Gradle, NPM & Cargo</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+
+            {/* 3D Glossy Arrow Button */}
+            <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-white/60 dark:bg-white/5 border border-white/40 dark:border-white/10 group-hover:bg-pink-500 group-hover:text-white group-hover:border-pink-500/40 group-hover:shadow-[0_4px_12px_rgba(236,72,153,0.4)] transition-all duration-300">
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+            </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-            <span className="text-slate-500 dark:text-slate-400">Found:</span>
-            <span className="font-extrabold text-slate-900 dark:text-white">
+          <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between text-xs relative z-10">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
+            <span className="font-mono font-extrabold text-slate-900 dark:text-white px-2 py-0.5 rounded-lg bg-slate-100/80 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 shadow-xs">
               {formatBytes(junkCategories.find((c) => c.id === 'developer_junk')?.total_bytes || 0)}
             </span>
           </div>
@@ -347,51 +375,67 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 3: Trash Bins */}
         <div
           onClick={() => onNavigateTab('trash-bins')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden"
+          className="glass-panel rounded-3xl p-5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative isolate overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 hover:-translate-y-1 hover:shadow-[0_16px_36px_rgba(245,158,11,0.18)] hover:border-amber-500/50"
         >
-          <div className="flex items-start justify-between mb-3">
+          {/* Top Glass Specular Shine */}
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+          {/* Ambient Glow */}
+          <div className="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-amber-500/15 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+          <div className="flex items-start justify-between mb-4 relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 to-orange-600 text-white flex items-center justify-center shadow-md shadow-amber-500/25 group-hover:scale-105 transition-transform p-[1px]">
-                <Trash2 className="w-5 h-5 drop-shadow-sm" />
+              {/* 3D Glossy Icon Squircle */}
+              <div className="relative w-12 h-12 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-110 shrink-0 overflow-hidden border border-white/35 dark:border-white/20 bg-gradient-to-b from-amber-400 via-orange-500 to-rose-600 shadow-[0_6px_18px_rgba(245,158,11,0.4),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)]">
+                {/* Top Specular Gloss Highlight */}
+                <div className="absolute inset-x-1.5 top-0.5 h-4 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                {/* Bottom Caustic Reflex */}
+                <div className="absolute inset-x-1.5 bottom-0.5 h-1.5 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                <Trash2 className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
+                <h4 className="font-extrabold text-sm text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
                   Trash Bins
                 </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">Main & volume bins</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Main & volume bins</p>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+
+            {/* 3D Glossy Arrow Button */}
+            <div className="w-7 h-7 rounded-xl flex items-center justify-center bg-white/60 dark:bg-white/5 border border-white/40 dark:border-white/10 group-hover:bg-amber-500 group-hover:text-white group-hover:border-amber-500/40 group-hover:shadow-[0_4px_12px_rgba(245,158,11,0.4)] transition-all duration-300">
+              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+            </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
-            <span className="text-slate-500 dark:text-slate-400">Found:</span>
-            <span className="font-extrabold text-slate-900 dark:text-white">
+          <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 flex items-center justify-between text-xs relative z-10">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
+            <span className="font-mono font-extrabold text-slate-900 dark:text-white px-2 py-0.5 rounded-lg bg-slate-100/80 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 shadow-xs">
               {formatBytes(junkCategories.find((c) => c.id === 'trash')?.total_bytes || 0)}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Connected Storage Disks Section */}
+      {/* Connected Storage Disks Section - 3D Glassmorphic Storage Rack */}
       {systemOverview?.disks && systemOverview.disks.length > 0 && (
-        <div className="w-full space-y-2.5">
+        <div className="w-full space-y-3">
           <div className="flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <HardDrive className="w-4 h-4 text-[#C5453E]" />
+              <div className="w-5 h-5 rounded-lg bg-[#C5453E]/15 text-[#C5453E] border border-[#C5453E]/30 flex items-center justify-center shadow-xs">
+                <HardDrive className="w-3 h-3" />
+              </div>
               <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                Connected Storage Devices ({systemOverview.disks.length})
+                CONNECTED STORAGE DEVICES ({systemOverview.disks.length})
               </span>
             </div>
             {systemOverview.disks.length > 1 && (
-              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/25 shadow-xs">
                 Multi-Drive Space Optimizer Active
               </span>
             )}
           </div>
 
           <div
-            className={`grid gap-3 ${
+            className={`grid gap-3.5 ${
               systemOverview.disks.length === 1
                 ? 'grid-cols-1'
                 : 'grid-cols-1 md:grid-cols-2'
@@ -403,68 +447,80 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
               return (
                 <div
                   key={`${d.mount_point}-${idx}`}
-                  className="glass-panel rounded-2xl p-4 flex flex-col justify-between gap-3 text-xs shadow-sm relative isolate overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
+                  className="glass-panel rounded-3xl p-5 flex flex-col justify-between gap-4 text-xs shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 relative isolate overflow-hidden group hover:border-[#C5453E]/40 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(197,69,62,0.15)] transition-all duration-300"
                 >
+                  {/* Top Specular Gloss Highlight Line */}
+                  <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
 
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-start justify-between gap-2 relative z-10">
+                    <div className="flex items-center gap-3.5">
+                      {/* 3D Glossy Disk Squircle Badge */}
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-sm ${
+                        className={`relative w-12 h-12 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-105 shrink-0 overflow-hidden border border-white/40 dark:border-white/25 shadow-[0_6px_18px_rgba(0,0,0,0.3),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)] ${
                           d.is_internal
-                            ? 'bg-[#C5453E]/15 text-[#C5453E] border border-[#C5453E]/30'
-                            : 'bg-indigo-500/15 text-indigo-500 border border-indigo-500/30'
+                            ? 'bg-gradient-to-b from-[#ff635b] via-[#C5453E] to-[#93201b]'
+                            : 'bg-gradient-to-b from-indigo-400 via-indigo-600 to-cyan-600'
                         }`}
                       >
-                        <HardDrive className="w-4 h-4" />
+                        {/* Top Specular Gloss Highlight */}
+                        <div className="absolute inset-x-1.5 top-0.5 h-4 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                        {/* Bottom Caustic Reflex */}
+                        <div className="absolute inset-x-1.5 bottom-0.5 h-1.5 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                        <HardDrive className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
                       </div>
+
                       <div>
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="font-black text-slate-900 dark:text-white text-sm tracking-tight">
                             {d.name}
                           </h4>
                           <span
-                            className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border ${
+                            className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] ${
                               d.is_internal
-                                ? 'bg-[#C5453E]/10 text-[#C5453E] border-[#C5453E]/25'
-                                : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25'
+                                ? 'bg-[#C5453E]/15 text-[#C5453E] border-[#C5453E]/30 dark:text-[#ff7d75]'
+                                : 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
                             }`}
                           >
-                            {d.disk_type || (d.is_internal ? 'Internal SSD' : 'External Storage')}
+                            {d.disk_type || (d.is_internal ? 'Internal NVMe SSD' : 'External Storage')}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                           {formatBytes(d.available_bytes)} Free of {formatBytes(d.total_bytes)}
                           {d.file_system ? ` • ${d.file_system}` : ''}
                         </p>
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 max-w-[120px] truncate">
-                      {d.mount_point}
-                    </span>
+                    {/* Mount Path Badge */}
+                    <div className="flex items-center gap-1 text-[11px] font-mono font-bold text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-xl bg-slate-100/90 dark:bg-white/10 border border-slate-200/80 dark:border-white/15 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4),0_2px_6px_rgba(0,0,0,0.1)] max-w-[140px] truncate">
+                      <span>{d.mount_point}</span>
+                    </div>
                   </div>
 
-                  {/* Capacity Meter */}
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-1 h-2 rounded-full bg-slate-200/80 dark:bg-slate-900 overflow-hidden shadow-inner border border-slate-300/40 dark:border-white/5">
+                  {/* 3D Glossy Capacity Meter */}
+                  <div className="flex items-center gap-3.5 relative z-10">
+                    <div className="relative flex-1 h-3.5 rounded-full bg-slate-200/90 dark:bg-[#0a0e1a]/90 overflow-hidden shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_1px_rgba(255,255,255,0.1)] border border-slate-300/50 dark:border-white/10 p-[2px]">
                       <div
-                        className={`h-full rounded-full transition-all duration-500 ${
+                        className={`relative h-full rounded-full transition-all duration-500 overflow-hidden ${
                           isCritical
-                            ? 'bg-gradient-to-r from-red-600 to-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'
+                            ? 'bg-gradient-to-r from-red-600 via-rose-500 to-orange-500 shadow-[0_0_14px_rgba(239,68,68,0.7)]'
                             : isHigh
-                            ? 'bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.5)]'
-                            : 'bg-gradient-to-r from-[#C5453E] to-rose-400 shadow-[0_0_8px_rgba(197,69,62,0.4)]'
+                            ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 shadow-[0_0_14px_rgba(245,158,11,0.7)]'
+                            : 'bg-gradient-to-r from-[#C5453E] via-[#e56861] to-[#ff9088] shadow-[0_0_14px_rgba(197,69,62,0.6)]'
                         }`}
                         style={{ width: `${Math.min(d.usage_percent, 100)}%` }}
-                      />
+                      >
+                        {/* Progress Bar Specular Gloss Sheen */}
+                        <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
+                      </div>
                     </div>
                     <span
-                      className={`font-mono font-bold text-[11px] min-w-[32px] text-right ${
+                      className={`font-mono font-black text-xs min-w-[36px] text-right drop-shadow-xs ${
                         isCritical
                           ? 'text-red-500'
                           : isHigh
                           ? 'text-amber-500'
-                          : 'text-slate-700 dark:text-slate-300'
+                          : 'text-slate-800 dark:text-slate-200'
                       }`}
                     >
                       {Math.round(d.usage_percent)}%

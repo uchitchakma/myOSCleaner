@@ -153,33 +153,41 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
       {/* Hardware Breakdown Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* CPU Card */}
-        <div className="glass-panel rounded-3xl p-5 space-y-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
+        <div className="glass-panel rounded-3xl p-5 space-y-4 shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 relative isolate overflow-hidden group hover:border-blue-500/40 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(59,130,246,0.15)] transition-all duration-300">
+          {/* Top Specular Gloss Highlight Line */}
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+
+          <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-blue-500/15 text-blue-500 border border-blue-500/30">
-                <Cpu className="w-5 h-5" />
+              {/* 3D Glossy CPU Icon Squircle */}
+              <div className="relative w-11 h-11 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-105 shrink-0 overflow-hidden border border-white/40 dark:border-white/25 bg-gradient-to-b from-blue-400 via-indigo-500 to-indigo-700 shadow-[0_6px_18px_rgba(59,130,246,0.4),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)]">
+                <div className="absolute inset-x-1.5 top-0.5 h-3.5 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-1.5 bottom-0.5 h-1 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                <Cpu className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
               </div>
-              <span className="font-bold text-sm text-slate-900 dark:text-white">Processor (CPU)</span>
+              <span className="font-extrabold text-sm text-slate-900 dark:text-white">Processor (CPU)</span>
             </div>
             <span className="font-mono font-black text-sm text-blue-500">{cpuUsage.toFixed(1)}%</span>
           </div>
 
-          <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2.5 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
+          <div className="w-full bg-slate-200/90 dark:bg-[#0a0e1a]/90 h-3 rounded-full overflow-hidden p-[1.5px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_1px_rgba(255,255,255,0.1)] border border-slate-300/50 dark:border-white/10 relative z-10">
             <div
-              className="bg-gradient-to-r from-blue-400 to-indigo-500 h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"
+              className="bg-gradient-to-r from-blue-400 via-indigo-500 to-indigo-600 h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(59,130,246,0.6)] relative overflow-hidden"
               style={{ width: `${Math.min(cpuUsage, 100)}%` }}
-            />
+            >
+              <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
+            </div>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-white/5 space-y-1.5 text-xs">
+          <div className="pt-2 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs relative z-10">
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Chip Model:</span>
+              <span className="font-medium">Chip Model:</span>
               <span className="text-slate-800 dark:text-slate-200 font-semibold truncate max-w-[160px]">
                 {systemOverview?.cpu_brand || 'Processor'}
               </span>
             </div>
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Core Count:</span>
+              <span className="font-medium">Core Count:</span>
               <span className="text-slate-800 dark:text-slate-200 font-semibold">
                 {systemOverview?.cpu_cores || 8} Active Cores
               </span>
@@ -188,22 +196,28 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
         </div>
 
         {/* Swap / Virtual Memory Card */}
-        <div className="glass-panel rounded-3xl p-5 space-y-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
+        <div className="glass-panel rounded-3xl p-5 space-y-4 shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 relative isolate overflow-hidden group hover:border-purple-500/40 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(168,85,247,0.15)] transition-all duration-300">
+          {/* Top Specular Gloss Highlight Line */}
+          <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+
+          <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-purple-500/15 text-purple-500 border border-purple-500/30">
-                <Activity className="w-5 h-5" />
+              {/* 3D Glossy Activity Icon Squircle */}
+              <div className="relative w-11 h-11 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-105 shrink-0 overflow-hidden border border-white/40 dark:border-white/25 bg-gradient-to-b from-purple-400 via-purple-600 to-indigo-700 shadow-[0_6px_18px_rgba(168,85,247,0.4),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)]">
+                <div className="absolute inset-x-1.5 top-0.5 h-3.5 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                <div className="absolute inset-x-1.5 bottom-0.5 h-1 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                <Activity className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
               </div>
-              <span className="font-bold text-sm text-slate-900 dark:text-white">Virtual Swap</span>
+              <span className="font-extrabold text-sm text-slate-900 dark:text-white">Virtual Swap</span>
             </div>
             <span className="font-mono font-black text-sm text-purple-500">
               {formatBytes(systemOverview?.used_swap_bytes || 0)}
             </span>
           </div>
 
-          <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2.5 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
+          <div className="w-full bg-slate-200/90 dark:bg-[#0a0e1a]/90 h-3 rounded-full overflow-hidden p-[1.5px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_1px_rgba(255,255,255,0.1)] border border-slate-300/50 dark:border-white/10 relative z-10">
             <div
-              className="bg-gradient-to-r from-purple-400 to-pink-500 h-full rounded-full shadow-[0_0_8px_rgba(168,85,247,0.5)]"
+              className="bg-gradient-to-r from-purple-400 via-pink-500 to-rose-500 h-full rounded-full shadow-[0_0_10px_rgba(168,85,247,0.6)] relative overflow-hidden"
               style={{
                 width: `${
                   systemOverview?.total_swap_bytes
@@ -211,18 +225,20 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
                     : 10
                 }%`,
               }}
-            />
+            >
+              <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
+            </div>
           </div>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-white/5 space-y-1.5 text-xs">
+          <div className="pt-2 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs relative z-10">
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Allocated Swap:</span>
+              <span className="font-medium">Allocated Swap:</span>
               <span className="text-slate-800 dark:text-slate-200 font-semibold">
                 {formatBytes(systemOverview?.total_swap_bytes || 0)}
               </span>
             </div>
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>System Uptime:</span>
+              <span className="font-medium">System Uptime:</span>
               <span className="text-slate-800 dark:text-slate-200 font-semibold flex items-center gap-1">
                 <Clock className="w-3 h-3 text-[#C5453E]" />
                 {formatUptime(systemOverview?.uptime_seconds || 0)}
@@ -236,35 +252,41 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
           systemOverview.disks.map((disk, idx) => (
             <div
               key={`${disk.mount_point}-${idx}`}
-              className="glass-panel rounded-3xl p-5 space-y-4 shadow-sm relative overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
+              className="glass-panel rounded-3xl p-5 space-y-4 shadow-[0_8px_24px_rgba(0,0,0,0.06),inset_0_1px_1px_rgba(255,255,255,0.7)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_1px_rgba(255,255,255,0.12)] border border-white/30 dark:border-white/10 relative isolate overflow-hidden group hover:border-[#C5453E]/40 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(197,69,62,0.15)] transition-all duration-300"
             >
-              <div className="flex items-center justify-between">
+              {/* Top Specular Gloss Highlight Line */}
+              <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/50 dark:via-white/20 to-transparent pointer-events-none" />
+
+              <div className="flex items-center justify-between relative z-10">
                 <div className="flex items-center gap-3">
+                  {/* 3D Glossy Disk Squircle Badge */}
                   <div
-                    className={`p-2.5 rounded-2xl border ${
+                    className={`relative w-11 h-11 rounded-2xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-105 shrink-0 overflow-hidden border border-white/40 dark:border-white/25 shadow-[0_6px_18px_rgba(0,0,0,0.3),inset_0_1px_1.5px_rgba(255,255,255,0.8),inset_0_-1.5px_2px_rgba(0,0,0,0.4)] ${
                       disk.is_internal
-                        ? 'bg-[#C5453E]/15 text-[#C5453E] border-[#C5453E]/30'
-                        : 'bg-indigo-500/15 text-indigo-500 border-indigo-500/30'
+                        ? 'bg-gradient-to-b from-[#ff635b] via-[#C5453E] to-[#93201b]'
+                        : 'bg-gradient-to-b from-indigo-400 via-indigo-600 to-cyan-600'
                     }`}
                   >
-                    <HardDrive className="w-5 h-5" />
+                    <div className="absolute inset-x-1.5 top-0.5 h-3.5 rounded-t-xl bg-gradient-to-b from-white/70 via-white/20 to-transparent pointer-events-none" />
+                    <div className="absolute inset-x-1.5 bottom-0.5 h-1 rounded-b-xl bg-gradient-to-t from-white/25 to-transparent pointer-events-none" />
+                    <HardDrive className="w-5 h-5 text-white drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.5)] relative z-10" />
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-sm text-slate-900 dark:text-white">
+                      <span className="font-extrabold text-sm text-slate-900 dark:text-white">
                         {disk.name}
                       </span>
                       <span
-                        className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border ${
+                        className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] ${
                           disk.is_internal
-                            ? 'bg-[#C5453E]/10 text-[#C5453E] border-[#C5453E]/25'
-                            : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25'
+                            ? 'bg-[#C5453E]/15 text-[#C5453E] border-[#C5453E]/30 dark:text-[#ff7d75]'
+                            : 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/30'
                         }`}
                       >
                         {disk.disk_type || (disk.is_internal ? 'Internal SSD' : 'External Drive')}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
                       {disk.mount_point} {disk.file_system ? `• ${disk.file_system}` : ''}
                     </p>
                   </div>
@@ -274,26 +296,28 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
                 </span>
               </div>
 
-              <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2.5 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
+              <div className="w-full bg-slate-200/90 dark:bg-[#0a0e1a]/90 h-3 rounded-full overflow-hidden p-[1.5px] shadow-[inset_0_2px_4px_rgba(0,0,0,0.4),0_1px_1px_rgba(255,255,255,0.1)] border border-slate-300/50 dark:border-white/10 relative z-10">
                 <div
-                  className={`h-full rounded-full shadow-[0_0_8px_rgba(197,69,62,0.5)] ${
+                  className={`h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(197,69,62,0.6)] relative overflow-hidden ${
                     disk.is_internal
-                      ? 'bg-gradient-to-r from-[#C5453E] to-[#e58078]'
-                      : 'bg-gradient-to-r from-indigo-500 to-cyan-400'
+                      ? 'bg-gradient-to-r from-[#C5453E] via-[#e56861] to-[#ff9088]'
+                      : 'bg-gradient-to-r from-indigo-500 via-sky-500 to-cyan-400'
                   }`}
                   style={{ width: `${Math.min(disk.usage_percent, 100)}%` }}
-                />
+                >
+                  <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
+                </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-100 dark:border-white/5 space-y-1.5 text-xs">
+              <div className="pt-2 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs relative z-10">
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                  <span>Available Space:</span>
+                  <span className="font-medium">Available Space:</span>
                   <span className="text-slate-800 dark:text-slate-200 font-semibold font-mono">
                     {formatBytes(disk.available_bytes)}
                   </span>
                 </div>
                 <div className="flex justify-between text-slate-500 dark:text-slate-400">
-                  <span>Total Capacity:</span>
+                  <span className="font-medium">Total Capacity:</span>
                   <span className="text-slate-800 dark:text-slate-200 font-semibold font-mono">
                     {formatBytes(disk.total_bytes)}
                   </span>
