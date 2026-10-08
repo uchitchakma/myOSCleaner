@@ -80,12 +80,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="w-64 flex flex-col justify-between h-full bg-white/80 dark:bg-[#0c111e]/85 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 select-none p-3.5 transition-colors shadow-lg z-20">
       <div>
         {/* 3D App Title Header */}
-        <div className="flex items-center gap-3 px-2.5 py-3.5 mb-2">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-b from-[#db554e] via-[#C5453E] to-[#9b2c27] shadow-[0_8px_20px_rgba(197,69,62,0.4)] p-[1px] ring-1 ring-white/30">
-            <div className="w-full h-full rounded-2xl bg-gradient-to-b from-white/25 via-transparent to-black/20 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white drop-shadow-sm animate-pulse" />
-            </div>
-            <div className="absolute inset-x-1.5 top-1 h-2 rounded-full bg-gradient-to-b from-white/60 to-transparent pointer-events-none" />
+        <div className="flex items-center gap-3 px-2 py-3 mb-2 group cursor-default">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl shadow-[0_8px_20px_rgba(197,69,62,0.35)] transition-transform duration-300 group-hover:scale-105">
+            <img
+              src="/app-icon.png"
+              alt="myOSCleaner App Icon"
+              className="w-10 h-10 object-contain drop-shadow-md rounded-2xl pointer-events-none"
+            />
           </div>
 
           <div>

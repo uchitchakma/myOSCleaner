@@ -4,7 +4,6 @@ import {
   Moon,
   Sun,
   ShieldCheck,
-  GitBranch,
   Heart,
   Globe,
   CheckCircle,
@@ -171,8 +170,12 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#db554e] to-[#C5453E] text-white flex items-center justify-center shadow-md shadow-[#C5453E]/25">
-                <GitBranch className="w-5 h-5" />
+              <div className="w-12 h-12 rounded-2xl shadow-lg shadow-[#C5453E]/20 flex items-center justify-center p-0.5 overflow-hidden">
+                <img
+                  src="/app-icon.png"
+                  alt="myOSCleaner Icon"
+                  className="w-full h-full object-contain pointer-events-none"
+                />
               </div>
               <div>
                 <h4 className="text-sm font-black text-slate-900 dark:text-white">myOSCleaner is 100% Free & Open Source</h4>
