@@ -1,6 +1,6 @@
 [package]
 name = "myoscleaner"
-version = "1.0.0"
+version = "1.0.1"
 description = "Universal Cross-Platform System Cleaner, Memory Optimizer & Space Management Suite for macOS, Windows & Linux"
 authors = ["Uchit Chakma <uchitchakma.com>", "UCDREAMS TECHNOLOGIES LLP <ucdreams.com>"]
 edition = "2021"
