@@ -77,22 +77,24 @@ export const Header: React.FC<HeaderProps> = ({
   const { title, subtitle } = getTabTitle(activeTab);
 
   return (
-    <header className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#0d121f]/80 backdrop-blur-md select-none transition-colors">
+    <header className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-white/75 dark:bg-[#0c111e]/75 backdrop-blur-2xl select-none transition-colors relative z-10">
+      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+
       <div>
-        <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight font-sans flex items-center gap-2">
+        <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight font-sans flex items-center gap-2">
           {title}
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg">{subtitle}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg font-medium">{subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3">
         {/* System Pill */}
         {systemOverview && (
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-white/5 text-xs text-slate-700 dark:text-slate-300">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-white/10 text-xs text-slate-700 dark:text-slate-300 shadow-xs backdrop-blur-sm">
             <Laptop className="w-3.5 h-3.5 text-[#C5453E]" />
-            <span className="font-semibold text-slate-900 dark:text-white">{systemOverview.os_name} {systemOverview.os_version}</span>
+            <span className="font-bold text-slate-900 dark:text-white">{systemOverview.os_name} {systemOverview.os_version}</span>
             <span className="text-slate-400 dark:text-slate-500">•</span>
-            <span className="text-slate-500 dark:text-slate-400">{systemOverview.arch}</span>
+            <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">{systemOverview.arch}</span>
           </div>
         )}
 
@@ -100,10 +102,10 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           onClick={onQuickOptimizeRam}
           disabled={isOptimizingRam}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#C5453E]/10 hover:bg-[#C5453E]/20 text-[#C5453E] border border-[#C5453E]/30 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+          className="btn-3d-primary flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold cursor-pointer disabled:opacity-50"
           title="Flush Inactive Memory Pages"
         >
-          <Zap className={`w-3.5 h-3.5 text-[#C5453E] ${isOptimizingRam ? 'animate-bounce' : ''}`} />
+          <Zap className={`w-3.5 h-3.5 text-white ${isOptimizingRam ? 'animate-spin' : 'animate-bounce'}`} />
           <span>{isOptimizingRam ? 'Optimizing...' : 'Purge RAM'}</span>
         </button>
 
@@ -111,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           onClick={onRefresh}
           disabled={isRefreshing}
-          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/70 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5 transition-all active:scale-95 disabled:opacity-50"
+          className="btn-3d-secondary p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer disabled:opacity-50"
           title="Refresh System Status"
         >
           <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C5453E]' : ''}`} />
@@ -120,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Dark/Light mode toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/70 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5 transition-all active:scale-95"
+          className="btn-3d-secondary p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white cursor-pointer"
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
           {theme === 'dark' ? (
@@ -133,3 +135,5 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+export default Header;
+
