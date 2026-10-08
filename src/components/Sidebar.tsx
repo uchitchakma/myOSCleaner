@@ -31,6 +31,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'smart-scan' as NavTab,
       label: 'Smart Scan',
       icon: Sparkles,
+      iconGradient: 'from-[#ff635b] via-[#C5453E] to-[#93201b]',
+      glowShadow: 'shadow-[0_4px_14px_rgba(197,69,62,0.45)]',
       badge: junkCount > 0 ? `${junkCount}` : undefined,
       description: '1-Click Complete System Cleanup',
     },
@@ -38,12 +40,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'system-junk' as NavTab,
       label: 'System Junk',
       icon: Layers,
+      iconGradient: 'from-blue-400 via-indigo-500 to-indigo-700',
+      glowShadow: 'shadow-[0_4px_14px_rgba(99,102,241,0.45)]',
       description: 'Caches, Logs & Web Buffers',
     },
     {
       id: 'trash-bins' as NavTab,
       label: 'Trash Bins',
       icon: Trash2,
+      iconGradient: 'from-amber-400 via-orange-500 to-rose-600',
+      glowShadow: 'shadow-[0_4px_14px_rgba(245,158,11,0.45)]',
       badge: systemOverview?.trash_size_bytes ? formatBytes(systemOverview.trash_size_bytes) : undefined,
       description: 'Empty Bin & External Drives',
     },
@@ -51,24 +57,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
       id: 'large-files' as NavTab,
       label: 'Large & Old Files',
       icon: FolderArchive,
+      iconGradient: 'from-purple-400 via-purple-600 to-indigo-700',
+      glowShadow: 'shadow-[0_4px_14px_rgba(168,85,247,0.45)]',
       description: 'Recover Heavy Disk Space',
     },
     {
       id: 'uninstaller' as NavTab,
       label: 'App Uninstaller',
       icon: HardDrive,
+      iconGradient: 'from-emerald-400 via-teal-500 to-teal-700',
+      glowShadow: 'shadow-[0_4px_14px_rgba(16,185,129,0.45)]',
       description: 'Clean Apps & Leftover Files',
     },
     {
       id: 'developer' as NavTab,
       label: 'Developer Space',
       icon: Code2,
+      iconGradient: 'from-fuchsia-400 via-pink-500 to-rose-700',
+      glowShadow: 'shadow-[0_4px_14px_rgba(236,72,153,0.45)]',
       description: 'node_modules & Build Caches',
     },
     {
       id: 'ram-booster' as NavTab,
       label: 'RAM & Performance',
       icon: Cpu,
+      iconGradient: 'from-cyan-400 via-sky-500 to-blue-700',
+      glowShadow: 'shadow-[0_4px_14px_rgba(6,182,212,0.45)]',
       description: 'Memory Boost & CPU Stats',
     },
   ];
@@ -117,21 +131,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-xs font-semibold transition-all group relative cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-2xl text-xs font-semibold transition-all group relative cursor-pointer ${
                   isActive
                     ? 'btn-3d-primary shadow-[0_8px_20px_rgba(197,69,62,0.4)]'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/5'
                 }`}
               >
                 <div className="flex items-center gap-3 relative z-10">
+                  {/* 3D Glossy Glassmorphic Icon Squircle Badge */}
                   <div
-                    className={`p-1.5 rounded-xl transition-all ${
+                    className={`relative w-8 h-8 rounded-xl flex items-center justify-center p-[1px] transition-all duration-300 group-hover:scale-110 shrink-0 overflow-hidden border border-white/30 dark:border-white/20 bg-gradient-to-b ${item.iconGradient} ${item.glowShadow} ${
                       isActive
-                        ? 'bg-white/20 text-white shadow-inner'
-                        : 'bg-slate-100 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:scale-105'
+                        ? 'ring-2 ring-white/70 shadow-[0_0_16px_rgba(255,255,255,0.4),0_4px_12px_rgba(0,0,0,0.35)]'
+                        : 'shadow-[inset_0_1px_1px_rgba(255,255,255,0.6),inset_0_-1px_2px_rgba(0,0,0,0.35)]'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    {/* Top Specular Glossy Reflex / Highlight Arc */}
+                    <div className="absolute inset-x-1 top-0.5 h-3 rounded-t-lg bg-gradient-to-b from-white/65 via-white/20 to-transparent pointer-events-none" />
+
+                    {/* Bottom Caustic Rim Accent */}
+                    <div className="absolute inset-x-1 bottom-0.5 h-1 rounded-b-lg bg-gradient-to-t from-white/20 to-transparent pointer-events-none" />
+
+                    {/* Crisp Drop-Shadowed Icon */}
+                    <Icon className="w-4 h-4 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] relative z-10" />
                   </div>
                   <span className="truncate">{item.label}</span>
                 </div>
