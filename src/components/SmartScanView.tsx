@@ -107,86 +107,147 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
   }
 
   return (
-    <div className="p-8 max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] space-y-8 animate-fadeIn">
-      {/* Central Glowing Smart Scan 3D Sphere */}
+    <div className="p-8 max-w-5xl mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] space-y-9 animate-fadeIn">
+      {/* Central 3D Glassmorphic Master Sphere */}
       <div className="relative flex flex-col items-center justify-center">
-        {/* Ambient Glow Backdrops */}
-        <div className="absolute w-80 h-80 rounded-full bg-[#C5453E]/20 blur-3xl -z-10 animate-pulse-slow pointer-events-none" />
-        <div className="absolute w-64 h-64 rounded-full bg-rose-500/15 blur-2xl -z-10 pointer-events-none" />
+        {/* Ambient Neon Aura Backdrops */}
+        <div className="absolute w-96 h-96 rounded-full bg-gradient-to-tr from-[#C5453E]/30 via-rose-500/20 to-orange-500/15 blur-3xl -z-10 animate-glow-aura pointer-events-none" />
+        <div className="absolute w-72 h-72 rounded-full bg-[#C5453E]/25 blur-2xl -z-10 pointer-events-none" />
 
-        {/* Circular Outer Glass Ring */}
-        <div className="relative w-64 h-64 rounded-full flex items-center justify-center p-2.5 bg-gradient-to-tr from-[#C5453E]/40 via-rose-500/25 to-orange-500/40 border border-white/40 dark:border-white/20 shadow-[0_20px_50px_rgba(197,69,62,0.3)] backdrop-blur-xl">
-          {/* Animated Spinner Ring when Cleaning */}
-          {isCleaning && (
-            <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#C5453E] border-r-rose-400 border-b-orange-400 animate-spin" />
-          )}
+        {/* Multi-Layered 3D Concentric Orbital Halo */}
+        <div className="relative w-80 h-80 sm:w-84 sm:h-84 flex items-center justify-center">
+          {/* Layer 1: Outermost Rotating Laser Orbit Ring */}
+          <div className="absolute inset-0 rounded-full border border-dashed border-[#C5453E]/40 dark:border-[#C5453E]/50 animate-rotate-clockwise pointer-events-none p-1">
+            <div className="w-3 h-3 rounded-full bg-[#C5453E] shadow-[0_0_12px_#C5453E] absolute -top-1.5 left-1/2 -translate-x-1/2 ring-2 ring-white/60" />
+            <div className="w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_8px_#fb923c] absolute -bottom-1 left-1/3 ring-1 ring-white/40" />
+          </div>
 
-          {/* Inner Circle Content */}
-          <div className="w-56 h-56 rounded-full bg-white/90 dark:bg-[#0f172a]/90 border border-white/60 dark:border-white/10 flex flex-col items-center justify-center p-6 text-center shadow-[inset_0_2px_10px_rgba(0,0,0,0.15)] relative overflow-hidden group">
-            {/* Top Specular Sheen */}
-            <div className="absolute inset-x-4 top-2 h-8 rounded-full bg-gradient-to-b from-white/60 dark:from-white/15 to-transparent pointer-events-none" />
+          {/* Layer 2: Counter-Rotating Fine Crystal Orbit Ring */}
+          <div className="absolute inset-3 rounded-full border border-white/40 dark:border-white/10 animate-rotate-counter pointer-events-none">
+            <div className="w-2.5 h-2.5 rounded-full bg-rose-400 shadow-[0_0_10px_#f43f5e] absolute top-1/4 -right-1 ring-1 ring-white/50" />
+          </div>
 
-            {scanState === 'idle' && (
-              <>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-b from-[#db554e] via-[#C5453E] to-[#9b2c27] flex items-center justify-center shadow-lg shadow-[#C5453E]/40 mb-2.5 group-hover:scale-110 transition-transform ring-1 ring-white/30">
-                  <Sparkles className="w-7 h-7 text-white drop-shadow-sm" />
-                </div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">Smart Clean</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">1-Click Universal Boost</p>
-              </>
-            )}
+          {/* Layer 3: 3D Frosted Crystal Glass Bezel */}
+          <div
+            onClick={scanState === 'idle' ? handleStartSmartScan : scanState === 'scanned' ? handleCleanNow : handleStartSmartScan}
+            className="group cursor-pointer relative w-68 h-68 sm:w-72 sm:h-72 rounded-full p-2.5 glass-orb-outer flex items-center justify-center transition-all duration-500 hover:scale-105 active:scale-95"
+            title={scanState === 'idle' ? 'Click to Start Smart Scan' : scanState === 'scanned' ? 'Click to Clean Now' : 'Click to Scan Again'}
+          >
+            {/* Top Bevel Specular Sheen */}
+            <div className="absolute inset-x-6 top-1.5 h-6 rounded-full bg-gradient-to-b from-white/80 dark:from-white/30 to-transparent pointer-events-none z-20" />
 
+            {/* Rotating Cleaning Spinner Ring */}
             {isCleaning && (
-              <>
-                <div className="w-12 h-12 rounded-full border-3 border-[#C5453E]/30 border-t-[#C5453E] animate-spin flex items-center justify-center mb-3">
-                  <RefreshCw className="w-5 h-5 text-[#C5453E]" />
-                </div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
-                  Cleaning Junk...
-                </h3>
-                <p className="text-[11px] text-[#C5453E] font-mono mt-1 font-semibold">
-                  {cleaningProgress}% complete
-                </p>
-              </>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#C5453E] border-r-rose-400 border-b-orange-400 animate-spin z-20" />
             )}
 
-            {scanState === 'scanned' && !isScanning && !isCleaning && (
-              <>
-                <span className="text-[11px] uppercase font-bold tracking-wider text-[#C5453E]">
-                  Ready to Reclaim
-                </span>
-                <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight my-1 font-sans">
-                  {formatBytes(totalSafeBytes)}
-                </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  {totalItemsCount} Safe Items Found
-                </p>
-              </>
-            )}
+            {/* Layer 4: Deep Optical Glass Sphere (Core Lens) */}
+            <div className="w-full h-full rounded-full glass-orb-inner flex flex-col items-center justify-center p-6 text-center relative overflow-hidden shadow-2xl">
+              {/* Glossy Dome Specular Arc Highlight */}
+              <div className="absolute inset-x-4 top-2 h-24 rounded-full bg-gradient-to-b from-white/70 dark:from-white/15 via-white/20 dark:via-white/5 to-transparent pointer-events-none z-10" />
 
-            {scanState === 'cleaned' && (
-              <>
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-2 ring-1 ring-white/30">
-                  <CheckCircle2 className="w-7 h-7 text-white" />
+              {/* Shimmer Light Sweep on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 dark:via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none z-10" />
+
+              {/* Bottom Caustic Neon Light Reservoir */}
+              <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#C5453E]/30 via-rose-500/10 to-transparent pointer-events-none" />
+
+              {/* Content State 1: IDLE */}
+              {scanState === 'idle' && (
+                <div className="flex flex-col items-center justify-center space-y-3 z-10 animate-fadeIn">
+                  {/* 3D Floating Glossy Crimson Icon Badge */}
+                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-b from-[#e55c54] via-[#C5453E] to-[#922621] p-[1.5px] shadow-[0_12px_28px_rgba(197,69,62,0.5)] ring-1 ring-white/50 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-300">
+                    <div className="w-full h-full rounded-2xl bg-gradient-to-b from-white/30 via-transparent to-black/25 flex items-center justify-center relative overflow-hidden">
+                      <Sparkles className="w-8 h-8 text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] animate-pulse" />
+                      {/* Top Specular Sheen on Icon Badge */}
+                      <div className="absolute inset-x-1.5 top-0.5 h-3 rounded-full bg-gradient-to-b from-white/70 to-transparent opacity-90" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight drop-shadow-sm group-hover:text-[#C5453E] transition-colors">
+                      Smart Clean
+                    </h3>
+                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/60 dark:bg-white/10 border border-white/40 dark:border-white/10 shadow-xs">
+                      <span className="text-[11px] font-bold text-slate-600 dark:text-slate-300 tracking-wide">
+                        1-Click Universal Boost
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className="text-[10px] font-semibold text-[#C5453E] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                    Click to Scan →
+                  </span>
                 </div>
-                <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">All Clean!</h3>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                  Freed {formatBytes(cleanedFreedBytes > 0 ? cleanedFreedBytes : totalSafeBytes)}
-                </p>
-              </>
-            )}
+              )}
+
+              {/* Content State 2: CLEANING */}
+              {isCleaning && (
+                <div className="flex flex-col items-center justify-center space-y-2 z-10 animate-fadeIn">
+                  <div className="w-14 h-14 rounded-full border-3 border-[#C5453E]/30 border-t-[#C5453E] animate-spin flex items-center justify-center mb-1">
+                    <RefreshCw className="w-6 h-6 text-[#C5453E] animate-pulse" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white tracking-tight">
+                    Purging Junk...
+                  </h3>
+                  <div className="px-3 py-1 rounded-full bg-[#C5453E]/15 border border-[#C5453E]/30">
+                    <p className="text-xs text-[#C5453E] font-mono font-extrabold">
+                      {cleaningProgress}% complete
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Content State 3: SCANNED */}
+              {scanState === 'scanned' && !isScanning && !isCleaning && (
+                <div className="flex flex-col items-center justify-center space-y-1.5 z-10 animate-fadeIn">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5453E]/15 dark:bg-[#C5453E]/25 border border-[#C5453E]/30 text-[#C5453E] text-[10px] font-black tracking-widest uppercase">
+                    <Zap className="w-3 h-3" />
+                    <span>Ready to Clean</span>
+                  </div>
+                  <h3 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-sans drop-shadow-sm pt-1">
+                    {formatBytes(totalSafeBytes)}
+                  </h3>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 font-semibold">
+                    {totalItemsCount} Safe Items Audited
+                  </p>
+                  <span className="text-[10px] font-bold text-[#C5453E] uppercase tracking-wider pt-1">
+                    Click to Reclaim Now
+                  </span>
+                </div>
+              )}
+
+              {/* Content State 4: CLEANED */}
+              {scanState === 'cleaned' && (
+                <div className="flex flex-col items-center justify-center space-y-2 z-10 animate-fadeIn">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-600 p-[1.5px] shadow-[0_12px_28px_rgba(16,185,129,0.4)] ring-1 ring-white/50 mb-1">
+                    <div className="w-full h-full rounded-2xl bg-gradient-to-b from-white/30 via-transparent to-black/20 flex items-center justify-center">
+                      <CheckCircle2 className="w-8 h-8 text-white drop-shadow-sm" />
+                    </div>
+                  </div>
+                  <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                    System Optimized!
+                  </h3>
+                  <div className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30">
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                      Freed {formatBytes(cleanedFreedBytes > 0 ? cleanedFreedBytes : totalSafeBytes)}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* 3D Action Button under the circle */}
-        <div className="mt-6 flex flex-col items-center gap-2.5">
+        {/* 3D Action Buttons below the Master Orb */}
+        <div className="mt-7 flex flex-col items-center gap-3 z-10">
           {scanState === 'idle' && (
             <button
               onClick={handleStartSmartScan}
               disabled={isScanning}
-              className="btn-3d-primary px-8 py-3.5 rounded-2xl font-black text-sm tracking-wider uppercase flex items-center gap-2 cursor-pointer shadow-xl"
+              className="btn-3d-primary px-9 py-3.5 rounded-2xl font-black text-xs sm:text-sm tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-xl group"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
               <span>START SMART SCAN</span>
             </button>
           )}
@@ -196,15 +257,15 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
               <button
                 onClick={handleCleanNow}
                 disabled={isCleaning}
-                className="btn-3d-primary px-8 py-3.5 rounded-2xl font-black text-sm tracking-wider uppercase flex items-center gap-2 cursor-pointer shadow-xl"
+                className="btn-3d-primary px-9 py-3.5 rounded-2xl font-black text-xs sm:text-sm tracking-widest uppercase flex items-center gap-2.5 cursor-pointer shadow-xl group"
               >
-                <Zap className="w-4 h-4" />
+                <Zap className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 <span>CLEAN {formatBytes(totalSafeBytes)} NOW</span>
               </button>
               <button
                 onClick={handleStartSmartScan}
                 className="btn-3d-secondary p-3.5 rounded-2xl cursor-pointer"
-                title="Re-Scan"
+                title="Re-Scan System"
               >
                 <RefreshCw className="w-4 h-4 text-slate-600 dark:text-slate-300" />
               </button>
@@ -221,8 +282,8 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
             </button>
           )}
 
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 pt-0.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
             <span>100% Safe Deletion Guarantee • Personal documents are never modified</span>
           </div>
         </div>
@@ -233,8 +294,9 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 1: System Junk & Caches */}
         <div
           onClick={() => onNavigateTab('system-junk')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-[#db554e] to-[#C5453E] text-white flex items-center justify-center shadow-md shadow-[#C5453E]/30 group-hover:scale-105 transition-transform p-[1px]">
@@ -250,30 +312,27 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
           </div>
 
-          <div className="flex items-end justify-between pt-2.5 border-t border-slate-100 dark:border-white/5 text-xs">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
-            <span className="font-black text-slate-900 dark:text-white font-mono">
-              {formatBytes(
-                junkCategories
-                  .filter((c) => c.id === 'system_caches' || c.id === 'app_logs' || c.id === 'browser_junk')
-                  .reduce((acc, c) => acc + c.total_bytes, 0)
-              )}
+          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Found:</span>
+            <span className="font-extrabold text-slate-900 dark:text-white">
+              {formatBytes(junkCategories.find((c) => c.id === 'system_caches')?.total_bytes || 0)}
             </span>
           </div>
         </div>
 
-        {/* Card 2: Developer Junk */}
+        {/* Card 2: Developer Caches */}
         <div
           onClick={() => onNavigateTab('developer')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-fuchsia-500/50 cursor-pointer group flex flex-col justify-between"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-fuchsia-400 to-rose-600 text-white flex items-center justify-center shadow-md shadow-fuchsia-500/25 group-hover:scale-105 transition-transform p-[1px]">
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-rose-500 to-pink-600 text-white flex items-center justify-center shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform p-[1px]">
                 <Code2 className="w-5 h-5 drop-shadow-sm" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-fuchsia-500 transition-colors">
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
                   Developer Caches
                 </h4>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">Xcode, Gradle, NPM & Cargo</p>
@@ -282,14 +341,10 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
           </div>
 
-          <div className="flex items-end justify-between pt-2.5 border-t border-slate-100 dark:border-white/5 text-xs">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
-            <span className="font-black text-slate-900 dark:text-white font-mono">
-              {formatBytes(
-                junkCategories
-                  .filter((c) => c.id === 'developer_junk')
-                  .reduce((acc, c) => acc + c.total_bytes, 0)
-              )}
+          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Found:</span>
+            <span className="font-extrabold text-slate-900 dark:text-white">
+              {formatBytes(junkCategories.find((c) => c.id === 'developer_junk')?.total_bytes || 0)}
             </span>
           </div>
         </div>
@@ -297,15 +352,16 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         {/* Card 3: Trash Bins */}
         <div
           onClick={() => onNavigateTab('trash-bins')}
-          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-amber-500/50 cursor-pointer group flex flex-col justify-between"
+          className="glass-panel hover:shadow-xl rounded-3xl p-5 transition-all duration-300 hover:border-[#C5453E]/50 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 rounded-2xl bg-gradient-to-b from-amber-400 to-orange-600 text-white flex items-center justify-center shadow-md shadow-amber-500/25 group-hover:scale-105 transition-transform p-[1px]">
                 <Trash2 className="w-5 h-5 drop-shadow-sm" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+                <h4 className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-[#C5453E] transition-colors">
                   Trash Bins
                 </h4>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">Main & volume bins</p>
@@ -314,37 +370,43 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
             <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
           </div>
 
-          <div className="flex items-end justify-between pt-2.5 border-t border-slate-100 dark:border-white/5 text-xs">
-            <span className="text-slate-500 dark:text-slate-400 font-medium">Found:</span>
-            <span className="font-black text-slate-900 dark:text-white font-mono">
-              {formatBytes(systemOverview?.trash_size_bytes || 0)}
+          <div className="pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
+            <span className="text-slate-500 dark:text-slate-400">Found:</span>
+            <span className="font-extrabold text-slate-900 dark:text-white">
+              {formatBytes(junkCategories.find((c) => c.id === 'trash')?.total_bytes || 0)}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Disk Overview Banner */}
-      {systemOverview?.disks?.[0] && (
-        <div className="w-full glass-panel rounded-3xl p-4.5 flex items-center justify-between text-xs shadow-sm">
-          <div className="flex items-center gap-3.5">
-            <div className="p-2.5 rounded-2xl bg-[#C5453E]/15 text-[#C5453E] border border-[#C5453E]/30">
-              <HardDrive className="w-5 h-5" />
+      {/* Macintosh HD Main Volume Status Strip */}
+      {systemOverview?.disks && systemOverview.disks.length > 0 && (
+        <div className="w-full glass-panel rounded-2xl p-4 flex items-center justify-between gap-4 text-xs shadow-sm relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-slate-200/80 dark:bg-slate-800 flex items-center justify-center text-[#C5453E]">
+              <HardDrive className="w-4 h-4" />
             </div>
             <div>
-              <span className="text-slate-900 dark:text-white font-bold">
-                {systemOverview.disks[0].name} ({systemOverview.disks[0].file_system.toUpperCase()})
-              </span>
-              <p className="text-slate-500 dark:text-slate-400 text-[11px] font-medium">
+              <p className="font-bold text-slate-900 dark:text-white">
+                {systemOverview.disks[0].name} ({systemOverview.disks[0].file_system})
+              </p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 {formatBytes(systemOverview.disks[0].available_bytes)} Free of {formatBytes(systemOverview.disks[0].total_bytes)}
               </p>
             </div>
           </div>
 
-          <div className="w-48 bg-slate-200/80 dark:bg-slate-900/80 h-3 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/50 dark:border-white/10">
-            <div
-              className="bg-gradient-to-r from-[#C5453E] to-[#e58078] h-full rounded-full shadow-[0_0_10px_rgba(197,69,62,0.5)]"
-              style={{ width: `${systemOverview.disks[0].usage_percent}%` }}
-            />
+          <div className="flex items-center gap-3 w-1/3">
+            <div className="relative flex-1 h-2 rounded-full bg-slate-200/80 dark:bg-slate-800 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-[#C5453E] to-rose-400"
+                style={{ width: `${systemOverview.disks[0].usage_percent}%` }}
+              />
+            </div>
+            <span className="font-mono font-bold text-[11px] text-slate-700 dark:text-slate-300">
+              {Math.round(systemOverview.disks[0].usage_percent)}%
+            </span>
           </div>
         </div>
       )}
@@ -352,4 +414,3 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
   );
 };
 export default SmartScanView;
-
