@@ -156,7 +156,7 @@ export const AppUninstallerView: React.FC<AppUninstallerViewProps> = ({
       </div>
 
       {/* App List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filteredApps.length === 0 ? (
           <div className="py-12 glass-panel rounded-3xl text-center text-slate-400 text-xs shadow-sm">
             <HardDrive className="w-8 h-8 mx-auto mb-2 text-slate-300 dark:text-slate-600" />
@@ -172,7 +172,7 @@ export const AppUninstallerView: React.FC<AppUninstallerViewProps> = ({
                 className="glass-panel rounded-3xl overflow-hidden shadow-sm transition-all hover:border-[#C5453E]/40"
               >
                 {/* Main App Item */}
-                <div className="p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5 min-w-0 flex-1">
                     <div className="w-10 h-10 rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-[#C5453E] font-extrabold text-base shadow-sm shrink-0">
                       {app.name.charAt(0).toUpperCase()}

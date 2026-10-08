@@ -236,7 +236,7 @@ export const DeveloperSpaceView: React.FC<DeveloperSpaceViewProps> = ({
       </div>
 
       {/* Project Cards List */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {projects.length === 0 ? (
           <div className="py-12 glass-panel rounded-3xl text-center text-slate-400 text-xs shadow-sm">
             <FolderCode className="w-8 h-8 mx-auto mb-2 text-slate-300 dark:text-slate-600" />
@@ -251,14 +251,14 @@ export const DeveloperSpaceView: React.FC<DeveloperSpaceViewProps> = ({
             return (
               <div
                 key={proj.id}
-                className="glass-panel rounded-3xl p-4.5 transition-all hover:border-[#C5453E]/40 space-y-3 shadow-sm"
+                className="glass-panel rounded-3xl p-5 sm:p-6 transition-all hover:border-[#C5453E]/40 space-y-4 shadow-sm"
               >
                 {/* Project Header */}
                 <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3.5 min-w-0">
                     <button
                       onClick={() => toggleProject(proj)}
-                      className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                      className="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                     >
                       {allSelected ? (
                         <CheckSquare className="w-5 h-5 text-[#C5453E]" />
@@ -271,63 +271,63 @@ export const DeveloperSpaceView: React.FC<DeveloperSpaceViewProps> = ({
                       )}
                     </button>
 
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-sm text-slate-900 dark:text-white truncate">{proj.name}</h4>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${getFrameworkBadgeColor(proj.framework)}`}>
+                    <div className="min-w-0 space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white truncate">{proj.name}</h4>
+                        <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${getFrameworkBadgeColor(proj.framework)}`}>
                           {proj.framework}
                         </span>
-                        <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                        <span className="text-[11px] text-slate-400 dark:text-slate-500">
                           • Touched {formatTimeAgo(proj.last_modified_days_ago)}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-400 dark:text-slate-500 font-mono truncate">{proj.project_path}</p>
+                      <p className="text-xs text-slate-400 dark:text-slate-500 font-mono truncate">{proj.project_path}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
                     <div className="text-right">
-                      <span className="font-bold text-sm text-slate-900 dark:text-white font-mono block">
+                      <span className="font-bold text-sm sm:text-base text-slate-900 dark:text-white font-mono block">
                         {formatBytes(proj.total_cleanable_bytes)}
                       </span>
-                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400">
                         {proj.cleanable_folders.length} cleanable folder{proj.cleanable_folders.length > 1 ? 's' : ''}
                       </span>
                     </div>
 
                     <button
                       onClick={() => onRevealInFinder(proj.project_path)}
-                      className="btn-3d-secondary p-1.5 rounded-lg cursor-pointer"
+                      className="btn-3d-secondary p-2 rounded-xl cursor-pointer"
                       title="Reveal project in Finder / Explorer"
                     >
-                      <FolderOpen className="w-3.5 h-3.5" />
+                      <FolderOpen className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                {/* Cleanable Sub-folders */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-1 border-t border-slate-100 dark:border-white/5">
+                {/* Cleanable Sub-folders (Spaced & Padded Flex Wrap) */}
+                <div className="flex flex-wrap items-center gap-3 pt-3.5 border-t border-slate-200/60 dark:border-white/5">
                   {proj.cleanable_folders.map((folder, idx) => {
                     const isChecked = selectedFolders.has(folder.path);
                     return (
                       <div
                         key={idx}
                         onClick={() => toggleFolder(folder.path)}
-                        className={`p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer border transition-colors ${
+                        className={`px-4 py-2.5 rounded-2xl inline-flex items-center justify-between gap-3.5 text-xs cursor-pointer border transition-all duration-200 shadow-2xs ${
                           isChecked
-                            ? 'bg-[#C5453E]/15 border-[#C5453E]/40 text-[#C5453E] dark:text-white shadow-sm'
-                            : 'bg-slate-100/50 dark:bg-black/20 border-slate-200/50 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:bg-white/60 dark:hover:bg-white/5'
+                            ? 'bg-[#C5453E]/10 dark:bg-[#C5453E]/20 border-[#C5453E]/40 text-[#C5453E] dark:text-rose-300 ring-1 ring-[#C5453E]/20'
+                            : 'bg-white/80 dark:bg-slate-900/60 border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-[#C5453E]/30 hover:bg-white dark:hover:bg-slate-800/80'
                         }`}
                       >
-                        <div className="flex items-center gap-2 min-w-0 pr-2">
+                        <div className="flex items-center gap-2.5">
                           {isChecked ? (
-                            <CheckSquare className="w-3.5 h-3.5 text-[#C5453E] shrink-0" />
+                            <CheckSquare className="w-4 h-4 text-[#C5453E] shrink-0" />
                           ) : (
-                            <Square className="w-3.5 h-3.5 text-slate-400 dark:text-slate-600 shrink-0" />
+                            <Square className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
                           )}
-                          <span className="font-mono text-[11px] truncate font-semibold">{folder.folder_type}</span>
+                          <span className="font-mono text-xs font-bold text-slate-800 dark:text-slate-200">{folder.folder_type}</span>
                         </div>
-                        <span className="font-mono font-bold text-[11px] shrink-0 text-slate-700 dark:text-slate-300">
+                        <span className="font-mono font-extrabold text-xs px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-[#C5453E]">
                           {formatBytes(folder.size_bytes)}
                         </span>
                       </div>
