@@ -28,6 +28,8 @@ export interface DiskItem {
   usage_percent: number;
   file_system: string;
   is_removable: boolean;
+  disk_type?: string;
+  is_internal?: boolean;
 }
 
 export interface BatteryStatus {

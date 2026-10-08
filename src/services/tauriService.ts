@@ -97,9 +97,9 @@ export async function executeEmptyTrash(): Promise<CleanResult> {
   }
 }
 
-export async function fetchLargeFiles(minSizeMb: number = 25): Promise<LargeFileInfo[]> {
+export async function fetchLargeFiles(minSizeMb: number = 25, targetPath?: string): Promise<LargeFileInfo[]> {
   try {
-    return await invoke<LargeFileInfo[]>('scan_large_files_cmd', { minSizeMb });
+    return await invoke<LargeFileInfo[]>('scan_large_files_cmd', { minSizeMb, targetPath });
   } catch (e) {
     console.warn('invoke scan_large_files_cmd fallback:', e);
     return [];

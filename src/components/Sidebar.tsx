@@ -73,7 +73,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
   ];
 
-  const disk = systemOverview?.disks?.[0];
+  const [selectedDiskIdx, setSelectedDiskIdx] = React.useState(0);
+  const disks = systemOverview?.disks || [];
+  const disk = disks.length > 0 ? disks[selectedDiskIdx % disks.length] : null;
   const ramUsagePct = systemOverview?.memory_usage_percent || 0;
 
   return (
@@ -156,18 +158,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Real-time Storage & RAM Mini Monitor */}
         <div className="glass-panel rounded-2xl p-3 space-y-2.5 text-[11px] shadow-sm">
           {/* Storage */}
-          <div>
+          <div
+            onClick={() => {
+              if (disks.length > 1) {
+                setSelectedDiskIdx((prev) => (prev + 1) % disks.length);
+              }
+            }}
+            className={disks.length > 1 ? 'cursor-pointer group' : ''}
+            title={disks.length > 1 ? `Click to switch disk (${selectedDiskIdx + 1}/${disks.length}): ${disk?.name}` : undefined}
+          >
             <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 mb-1">
-              <span className="flex items-center gap-1 font-semibold">
-                <HardDrive className="w-3 h-3 text-[#C5453E]" /> Disk Free
+              <span className="flex items-center gap-1 font-semibold truncate max-w-[130px]">
+                <HardDrive className={`w-3 h-3 ${disk?.is_internal ? 'text-[#C5453E]' : 'text-indigo-500'}`} />
+                <span className="truncate">{disk?.name || 'Disk Free'}</span>
+                {disks.length > 1 && (
+                  <span className="text-[9px] font-black px-1 rounded bg-[#C5453E]/15 text-[#C5453E]">
+                    {selectedDiskIdx + 1}/{disks.length}
+                  </span>
+                )}
               </span>
-              <span className="text-slate-900 dark:text-white font-bold font-mono">
+              <span className="text-slate-900 dark:text-white font-bold font-mono text-[10px]">
                 {disk ? formatBytes(disk.available_bytes) : '...'}
               </span>
             </div>
             <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
               <div
-                className="bg-gradient-to-r from-[#C5453E] to-[#e58078] h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(197,69,62,0.4)]"
+                className={`h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(197,69,62,0.4)] ${
+                  disk?.is_internal
+                    ? 'bg-gradient-to-r from-[#C5453E] to-[#e58078]'
+                    : 'bg-gradient-to-r from-indigo-500 to-cyan-400'
+                }`}
                 style={{ width: `${Math.min(disk?.usage_percent || 50, 100)}%` }}
               />
             </div>

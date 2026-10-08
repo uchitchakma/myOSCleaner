@@ -45,27 +45,73 @@ pub mod commands {
 
             for d in disks_provider.iter() {
                 let mount = d.mount_point().to_string_lossy().to_string();
-                let name = d.name().to_string_lossy().to_string();
+                let raw_name = d.name().to_string_lossy().to_string();
                 let total = d.total_space();
                 let avail = d.available_space();
 
-                if mount.starts_with("/System/Volumes/") || mount.starts_with("/private/") || mount.starts_with("/dev") {
+                // Skip internal system-sealed APFS snapshots / OS system mounts
+                if mount.starts_with("/System/Volumes/") || mount.starts_with("/private/") || mount.starts_with("/dev") || mount.starts_with("/proc") || mount.starts_with("/sys") {
                     continue;
                 }
+
+                let is_root = mount == "/" || mount == "C:\\" || mount == "C:/";
+                let is_removable = d.is_removable() || mount.starts_with("/Volumes/") || mount.starts_with("/media/") || mount.starts_with("/mnt/") || (!is_root && (mount.ends_with(":\\") || mount.ends_with(":/")));
+                let is_internal = is_root || (!is_removable && !mount.starts_with("/Volumes/"));
+
+                // Resolve friendly drive name
+                let name = if is_root {
+                    if cfg!(target_os = "macos") {
+                        if !raw_name.is_empty() && raw_name != "/" { raw_name } else { "Macintosh HD".to_string() }
+                    } else if cfg!(target_os = "windows") {
+                        "Local Disk (C:)".to_string()
+                    } else {
+                        "Primary Storage".to_string()
+                    }
+                } else if mount.starts_with("/Volumes/") {
+                    let vol_name = mount.trim_start_matches("/Volumes/").replace('_', " ");
+                    if !vol_name.is_empty() { vol_name } else if !raw_name.is_empty() { raw_name } else { "External Storage".to_string() }
+                } else if mount.starts_with("/media/") || mount.starts_with("/mnt/") {
+                    let leaf = std::path::Path::new(&mount).file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
+                    if !leaf.is_empty() { leaf } else if !raw_name.is_empty() { raw_name } else { "External Storage".to_string() }
+                } else if !raw_name.is_empty() {
+                    raw_name
+                } else {
+                    format!("Volume ({})", mount)
+                };
+
+                let disk_type = match d.kind() {
+                    sysinfo::DiskKind::SSD => {
+                        if is_internal { "Internal NVMe SSD".to_string() } else { "External SSD".to_string() }
+                    }
+                    sysinfo::DiskKind::HDD => {
+                        if is_internal { "Internal HDD".to_string() } else { "External HDD".to_string() }
+                    }
+                    sysinfo::DiskKind::Unknown(_) => {
+                        if is_internal {
+                            "Internal Flash / SSD".to_string()
+                        } else if is_removable {
+                            "External Storage / SSD".to_string()
+                        } else {
+                            "Secondary Volume".to_string()
+                        }
+                    }
+                };
 
                 let key = format!("{}-{}-{}", name, mount, total);
                 if seen_roots.insert(key) && total > 0 {
                     let used = total.saturating_sub(avail);
                     let pct = (used as f32 / total as f32) * 100.0;
                     disks.push(DiskItem {
-                        name: if name.is_empty() { "System HD".to_string() } else { name },
+                        name,
                         mount_point: mount,
                         total_bytes: total,
                         available_bytes: avail,
                         used_bytes: used,
                         usage_percent: pct,
                         file_system: d.file_system().to_string_lossy().to_string(),
-                        is_removable: d.is_removable(),
+                        is_removable,
+                        disk_type,
+                        is_internal,
                     });
                 }
             }
@@ -145,8 +191,8 @@ pub mod commands {
     }
 
     #[tauri::command]
-    pub async fn scan_large_files_cmd(min_size_mb: Option<u64>) -> Vec<LargeFileInfo> {
-        spawn_blocking(move || scanner::scan_large_files(min_size_mb.unwrap_or(25))).await.unwrap_or_default()
+    pub async fn scan_large_files_cmd(min_size_mb: Option<u64>, target_path: Option<String>) -> Vec<LargeFileInfo> {
+        spawn_blocking(move || scanner::scan_large_files(min_size_mb.unwrap_or(25), target_path)).await.unwrap_or_default()
     }
 
     #[tauri::command]

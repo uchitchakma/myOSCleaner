@@ -232,42 +232,81 @@ export const RamBoosterView: React.FC<RamBoosterViewProps> = ({
           </div>
         </div>
 
-        {/* Storage Volume Card */}
-        <div className="glass-panel rounded-3xl p-5 space-y-4 shadow-sm relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-[#C5453E]/15 text-[#C5453E] border border-[#C5453E]/30">
-                <HardDrive className="w-5 h-5" />
-              </div>
-              <span className="font-bold text-sm text-slate-900 dark:text-white">Primary Drive</span>
-            </div>
-            <span className="font-mono font-black text-sm text-[#C5453E]">
-              {systemOverview?.disks?.[0]?.usage_percent.toFixed(0)}%
-            </span>
-          </div>
-
-          <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2.5 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
+        {/* Storage Volume Cards (Internal & External SSD/HDD) */}
+        {systemOverview?.disks && systemOverview.disks.length > 0 ? (
+          systemOverview.disks.map((disk, idx) => (
             <div
-              className="bg-gradient-to-r from-[#C5453E] to-[#e58078] h-full rounded-full shadow-[0_0_8px_rgba(197,69,62,0.5)]"
-              style={{ width: `${systemOverview?.disks?.[0]?.usage_percent || 50}%` }}
-            />
-          </div>
+              key={`${disk.mount_point}-${idx}`}
+              className="glass-panel rounded-3xl p-5 space-y-4 shadow-sm relative overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`p-2.5 rounded-2xl border ${
+                      disk.is_internal
+                        ? 'bg-[#C5453E]/15 text-[#C5453E] border-[#C5453E]/30'
+                        : 'bg-indigo-500/15 text-indigo-500 border-indigo-500/30'
+                    }`}
+                  >
+                    <HardDrive className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="font-bold text-sm text-slate-900 dark:text-white">
+                        {disk.name}
+                      </span>
+                      <span
+                        className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border ${
+                          disk.is_internal
+                            ? 'bg-[#C5453E]/10 text-[#C5453E] border-[#C5453E]/25'
+                            : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25'
+                        }`}
+                      >
+                        {disk.disk_type || (disk.is_internal ? 'Internal SSD' : 'External Drive')}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                      {disk.mount_point} {disk.file_system ? `• ${disk.file_system}` : ''}
+                    </p>
+                  </div>
+                </div>
+                <span className="font-mono font-black text-sm text-[#C5453E]">
+                  {disk.usage_percent.toFixed(0)}%
+                </span>
+              </div>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-white/5 space-y-1.5 text-xs">
-            <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Available Space:</span>
-              <span className="text-slate-800 dark:text-slate-200 font-semibold">
-                {formatBytes(systemOverview?.disks?.[0]?.available_bytes || 0)}
-              </span>
+              <div className="w-full bg-slate-200/80 dark:bg-slate-900/80 h-2.5 rounded-full overflow-hidden p-[1px] shadow-inner border border-slate-300/40 dark:border-white/5">
+                <div
+                  className={`h-full rounded-full shadow-[0_0_8px_rgba(197,69,62,0.5)] ${
+                    disk.is_internal
+                      ? 'bg-gradient-to-r from-[#C5453E] to-[#e58078]'
+                      : 'bg-gradient-to-r from-indigo-500 to-cyan-400'
+                  }`}
+                  style={{ width: `${Math.min(disk.usage_percent, 100)}%` }}
+                />
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 dark:border-white/5 space-y-1.5 text-xs">
+                <div className="flex justify-between text-slate-500 dark:text-slate-400">
+                  <span>Available Space:</span>
+                  <span className="text-slate-800 dark:text-slate-200 font-semibold font-mono">
+                    {formatBytes(disk.available_bytes)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-slate-500 dark:text-slate-400">
+                  <span>Total Capacity:</span>
+                  <span className="text-slate-800 dark:text-slate-200 font-semibold font-mono">
+                    {formatBytes(disk.total_bytes)}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Total Capacity:</span>
-              <span className="text-slate-800 dark:text-slate-200 font-semibold">
-                {formatBytes(systemOverview?.disks?.[0]?.total_bytes || 0)}
-              </span>
-            </div>
+          ))
+        ) : (
+          <div className="glass-panel rounded-3xl p-5 space-y-2 text-xs text-slate-500">
+            <span>No active disks detected.</span>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

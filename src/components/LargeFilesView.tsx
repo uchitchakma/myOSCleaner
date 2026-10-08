@@ -15,8 +15,9 @@ import {
   Filter,
   Sparkles,
   ShieldCheck,
+  HardDrive,
 } from 'lucide-react';
-import { LargeFileInfo, CleanResult } from '../types';
+import { LargeFileInfo, CleanResult, DiskItem } from '../types';
 import { formatBytes, formatTimeAgo } from '../utils/format';
 import { GlassScanningHub } from './GlassScanningHub';
 
@@ -24,10 +25,13 @@ interface LargeFilesViewProps {
   files: LargeFileInfo[];
   onDeleteFiles: (paths: string[]) => Promise<CleanResult | null>;
   isDeleting: boolean;
-  onRefresh: () => Promise<void>;
+  onRefresh: (targetDrive?: string) => Promise<void>;
   isRefreshing: boolean;
   onRevealInFinder: (path: string) => Promise<void>;
   hasScanned: boolean;
+  disks?: DiskItem[];
+  selectedDrive?: string;
+  onSelectDrive?: (driveMount: string | undefined) => void;
 }
 
 export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
@@ -38,6 +42,9 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
   isRefreshing,
   onRevealInFinder,
   hasScanned,
+  disks = [],
+  selectedDrive,
+  onSelectDrive,
 }) => {
   const [sizeFilter, setSizeFilter] = useState<'all' | 'huge' | 'large' | 'medium'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
@@ -146,16 +153,44 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
               Scan Large & Old Files
             </h3>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Locate heavy files, long-forgotten archives, obsolete DMG installers, and large videos taking up space on your disk.
+              Locate heavy files, long-forgotten archives, obsolete DMG installers, and large videos taking up space on your internal disk or external SSD/HDD.
             </p>
           </div>
 
+          {/* Drive Selector Pills in Hero */}
+          {disks.length > 1 && (
+            <div className="w-full flex flex-wrap items-center justify-center gap-2 pt-1">
+              <button
+                onClick={() => onSelectDrive?.(undefined)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  !selectedDrive ? 'btn-3d-primary shadow-sm' : 'btn-3d-secondary'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>All Connected Storage</span>
+              </button>
+              {disks.map((d) => (
+                <button
+                  key={d.mount_point}
+                  onClick={() => onSelectDrive?.(d.mount_point)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                    selectedDrive === d.mount_point ? 'btn-3d-primary shadow-sm' : 'btn-3d-secondary'
+                  }`}
+                >
+                  <HardDrive className="w-3.5 h-3.5" />
+                  <span>{d.name}</span>
+                  <span className="text-[10px] opacity-75">({d.disk_type || (d.is_internal ? 'Internal' : 'External')})</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           <button
-            onClick={onRefresh}
+            onClick={() => onRefresh(selectedDrive)}
             className="btn-3d-primary w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            <span>SCAN LARGE & OLD FILES</span>
+            <span>SCAN {selectedDrive ? 'SELECTED DRIVE' : 'ALL STORAGE DRIVES'}</span>
           </button>
 
           <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 pt-1">
@@ -199,7 +234,7 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
             Clear
           </button>
           <button
-            onClick={onRefresh}
+            onClick={() => onRefresh(selectedDrive)}
             className="btn-3d-secondary p-2.5 rounded-xl text-xs font-semibold cursor-pointer"
             title="Re-scan Large Files"
           >
@@ -218,6 +253,56 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
 
       {/* Filter Tabs & Search Bar */}
       <div className="glass-panel p-4 rounded-3xl space-y-3.5 shadow-sm">
+        {/* Drive Target Selector Bar */}
+        {disks.length > 0 && (
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-100 dark:border-white/5 text-xs">
+            <span className="text-slate-400 dark:text-slate-500 font-extrabold uppercase text-[10px] tracking-wider shrink-0 flex items-center gap-1 mr-1">
+              <HardDrive className="w-3.5 h-3.5" /> Target Storage:
+            </span>
+            <button
+              onClick={() => {
+                onSelectDrive?.(undefined);
+                onRefresh(undefined);
+              }}
+              className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 text-xs ${
+                !selectedDrive ? 'btn-3d-primary shadow-sm' : 'btn-3d-secondary'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>All Drives ({disks.length})</span>
+            </button>
+            {disks.map((d) => {
+              const isSelected = selectedDrive === d.mount_point;
+              return (
+                <button
+                  key={d.mount_point}
+                  onClick={() => {
+                    onSelectDrive?.(d.mount_point);
+                    onRefresh(d.mount_point);
+                  }}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all flex items-center gap-1.5 cursor-pointer shrink-0 text-xs ${
+                    isSelected ? 'btn-3d-primary shadow-sm' : 'btn-3d-secondary'
+                  }`}
+                >
+                  <HardDrive
+                    className={`w-3.5 h-3.5 ${
+                      isSelected
+                        ? 'text-white'
+                        : d.is_internal
+                        ? 'text-[#C5453E]'
+                        : 'text-indigo-500'
+                    }`}
+                  />
+                  <span>{d.name}</span>
+                  <span className="text-[10px] opacity-75 font-mono">
+                    ({formatBytes(d.available_bytes)} free)
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         {/* Search */}
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />

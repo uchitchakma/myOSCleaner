@@ -64,8 +64,10 @@ export const App: React.FC = () => {
     }
   };
 
+  const [largeFilesDrive, setLargeFilesDrive] = useState<string | undefined>(undefined);
+
   // 2. Fast Non-Blocking On-Demand Scan per Tab
-  const scanTab = useCallback(async (tab: NavTab) => {
+  const scanTab = useCallback(async (tab: NavTab, customDrive?: string) => {
     // 1. Immediately activate scanning state so Progress Hub renders at 0ms
     setScanningTabs((prev) => new Set(prev).add(tab));
     
@@ -80,7 +82,8 @@ export const App: React.FC = () => {
     } else if (tab === 'trash-bins') {
       scanPromise = tauri.fetchTrashBin().then(setTrashItems);
     } else if (tab === 'large-files') {
-      scanPromise = tauri.fetchLargeFiles(25).then(setLargeFiles);
+      const drive = customDrive !== undefined ? customDrive : largeFilesDrive;
+      scanPromise = tauri.fetchLargeFiles(25, drive).then(setLargeFiles);
     } else if (tab === 'uninstaller') {
       scanPromise = tauri.fetchInstalledApplications().then(setInstalledApps);
     } else if (tab === 'developer') {
@@ -410,10 +413,16 @@ export const App: React.FC = () => {
               files={largeFiles}
               onDeleteFiles={handleDeleteLargeFiles}
               isDeleting={isCleaning}
-              onRefresh={() => scanTab('large-files')}
+              onRefresh={(targetDrive) => scanTab('large-files', targetDrive)}
               isRefreshing={scanningTabs.has('large-files')}
               onRevealInFinder={handleRevealInFinder}
               hasScanned={scannedTabs.has('large-files')}
+              disks={systemOverview?.disks || []}
+              selectedDrive={largeFilesDrive}
+              onSelectDrive={(drive) => {
+                setLargeFilesDrive(drive);
+                scanTab('large-files', drive);
+              }}
             />
           )}
 

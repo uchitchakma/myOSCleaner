@@ -32,6 +32,10 @@ pub struct DiskItem {
     pub usage_percent: f32,
     pub file_system: String,
     pub is_removable: bool,
+    #[serde(default)]
+    pub disk_type: String,
+    #[serde(default)]
+    pub is_internal: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -376,34 +376,107 @@ export const SmartScanView: React.FC<SmartScanViewProps> = ({
         </div>
       </div>
 
-      {/* Macintosh HD Main Volume Status Strip */}
+      {/* Connected Storage Disks Section */}
       {systemOverview?.disks && systemOverview.disks.length > 0 && (
-        <div className="w-full glass-panel rounded-2xl p-4 flex items-center justify-between gap-4 text-xs shadow-sm relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-slate-200/80 dark:bg-slate-800 flex items-center justify-center text-[#C5453E]">
-              <HardDrive className="w-4 h-4" />
+        <div className="w-full space-y-2.5">
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <HardDrive className="w-4 h-4 text-[#C5453E]" />
+              <span className="text-xs font-black uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                Connected Storage Devices ({systemOverview.disks.length})
+              </span>
             </div>
-            <div>
-              <p className="font-bold text-slate-900 dark:text-white">
-                {systemOverview.disks[0].name} ({systemOverview.disks[0].file_system})
-              </p>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                {formatBytes(systemOverview.disks[0].available_bytes)} Free of {formatBytes(systemOverview.disks[0].total_bytes)}
-              </p>
-            </div>
+            {systemOverview.disks.length > 1 && (
+              <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                Multi-Drive Space Optimizer Active
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-3 w-1/3">
-            <div className="relative flex-1 h-2 rounded-full bg-slate-200/80 dark:bg-slate-800 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-[#C5453E] to-rose-400"
-                style={{ width: `${systemOverview.disks[0].usage_percent}%` }}
-              />
-            </div>
-            <span className="font-mono font-bold text-[11px] text-slate-700 dark:text-slate-300">
-              {Math.round(systemOverview.disks[0].usage_percent)}%
-            </span>
+          <div
+            className={`grid gap-3 ${
+              systemOverview.disks.length === 1
+                ? 'grid-cols-1'
+                : 'grid-cols-1 md:grid-cols-2'
+            }`}
+          >
+            {systemOverview.disks.map((d, idx) => {
+              const isHigh = d.usage_percent > 85;
+              const isCritical = d.usage_percent > 92;
+              return (
+                <div
+                  key={`${d.mount_point}-${idx}`}
+                  className="glass-panel rounded-2xl p-4 flex flex-col justify-between gap-3 text-xs shadow-sm relative overflow-hidden group hover:border-[#C5453E]/30 transition-all duration-300"
+                >
+                  <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-sm ${
+                          d.is_internal
+                            ? 'bg-[#C5453E]/15 text-[#C5453E] border border-[#C5453E]/30'
+                            : 'bg-indigo-500/15 text-indigo-500 border border-indigo-500/30'
+                        }`}
+                      >
+                        <HardDrive className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h4 className="font-extrabold text-slate-900 dark:text-white text-xs">
+                            {d.name}
+                          </h4>
+                          <span
+                            className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded-md border ${
+                              d.is_internal
+                                ? 'bg-[#C5453E]/10 text-[#C5453E] border-[#C5453E]/25'
+                                : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/25'
+                            }`}
+                          >
+                            {d.disk_type || (d.is_internal ? 'Internal SSD' : 'External Storage')}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                          {formatBytes(d.available_bytes)} Free of {formatBytes(d.total_bytes)}
+                          {d.file_system ? ` • ${d.file_system}` : ''}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 max-w-[120px] truncate">
+                      {d.mount_point}
+                    </span>
+                  </div>
+
+                  {/* Capacity Meter */}
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex-1 h-2 rounded-full bg-slate-200/80 dark:bg-slate-900 overflow-hidden shadow-inner border border-slate-300/40 dark:border-white/5">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          isCritical
+                            ? 'bg-gradient-to-r from-red-600 to-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'
+                            : isHigh
+                            ? 'bg-gradient-to-r from-amber-500 to-orange-400 shadow-[0_0_8px_rgba(245,158,11,0.5)]'
+                            : 'bg-gradient-to-r from-[#C5453E] to-rose-400 shadow-[0_0_8px_rgba(197,69,62,0.4)]'
+                        }`}
+                        style={{ width: `${Math.min(d.usage_percent, 100)}%` }}
+                      />
+                    </div>
+                    <span
+                      className={`font-mono font-bold text-[11px] min-w-[32px] text-right ${
+                        isCritical
+                          ? 'text-red-500'
+                          : isHigh
+                          ? 'text-amber-500'
+                          : 'text-slate-700 dark:text-slate-300'
+                      }`}
+                    >
+                      {Math.round(d.usage_percent)}%
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

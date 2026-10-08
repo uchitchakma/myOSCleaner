@@ -433,7 +433,7 @@ pub fn scan_trash_items() -> Vec<CleanItem> {
     if trash_dir.exists() {
         if let Ok(entries) = fs::read_dir(&trash_dir) {
             let valid_entries: Vec<_> = entries.flatten().collect();
-            items = valid_entries
+            let mut internal_items: Vec<CleanItem> = valid_entries
                 .par_iter()
                 .map(|entry| {
                     let path = entry.path();
@@ -447,12 +447,71 @@ pub fn scan_trash_items() -> Vec<CleanItem> {
                         size_bytes: size,
                         selected_by_default: true,
                         category: "trash".to_string(),
-                        description: "Discarded file in Trash".to_string(),
+                        description: "Discarded file in Primary Trash".to_string(),
                         last_modified: mtime,
                         is_directory: path.is_dir(),
                     }
                 })
                 .collect();
+            items.append(&mut internal_items);
+        }
+    }
+
+    // Scan external mounted volumes for .Trashes on connected SSDs/HDDs
+    #[cfg(target_os = "macos")]
+    {
+        if let Ok(volumes) = fs::read_dir("/Volumes") {
+            for vol_entry in volumes.flatten() {
+                let vol_path = vol_entry.path();
+                let vol_name = vol_entry.file_name().to_string_lossy().to_string();
+                if vol_name.starts_with('.') || vol_name == "Macintosh HD" {
+                    continue;
+                }
+                let ext_trash = vol_path.join(".Trashes");
+                if ext_trash.exists() {
+                    if let Ok(trash_entries) = fs::read_dir(&ext_trash) {
+                        for sub in trash_entries.flatten() {
+                            let p = sub.path();
+                            if p.is_dir() {
+                                if let Ok(user_trash_entries) = fs::read_dir(&p) {
+                                    for user_item in user_trash_entries.flatten() {
+                                        let item_path = user_item.path();
+                                        let name = user_item.file_name().to_string_lossy().to_string();
+                                        let size = get_dir_size_fast(&item_path, 3, 1000);
+                                        let mtime = get_file_modified_time(&item_path);
+                                        items.push(CleanItem {
+                                            id: format!("trash-ext-{}", item_path.to_string_lossy()),
+                                            path: item_path.to_string_lossy().to_string(),
+                                            name,
+                                            size_bytes: size,
+                                            selected_by_default: true,
+                                            category: "trash".to_string(),
+                                            description: format!("Discarded file on external storage '{}'", vol_name),
+                                            last_modified: mtime,
+                                            is_directory: item_path.is_dir(),
+                                        });
+                                    }
+                                }
+                            } else {
+                                let name = sub.file_name().to_string_lossy().to_string();
+                                let size = get_dir_size_fast(&p, 3, 1000);
+                                let mtime = get_file_modified_time(&p);
+                                items.push(CleanItem {
+                                    id: format!("trash-ext-{}", p.to_string_lossy()),
+                                    path: p.to_string_lossy().to_string(),
+                                    name,
+                                    size_bytes: size,
+                                    selected_by_default: true,
+                                    category: "trash".to_string(),
+                                    description: format!("Discarded file on external storage '{}'", vol_name),
+                                    last_modified: mtime,
+                                    is_directory: p.is_dir(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -506,19 +565,44 @@ pub fn scan_system_junk() -> Vec<CleanCategory> {
     vec![cat1, cat2, cat3, cat4, cat5, cat6]
 }
 
-pub fn scan_large_files(min_size_mb: u64) -> Vec<LargeFileInfo> {
-    let home = get_home_dir();
-    let target_dirs = vec![
-        home.join("Downloads"),
-        home.join("Documents"),
-        home.join("Desktop"),
-        home.join("Movies"),
-        home.join("Music"),
-        home.join("Pictures"),
-    ];
-
+pub fn scan_large_files(min_size_mb: u64, target_path: Option<String>) -> Vec<LargeFileInfo> {
     let min_bytes = min_size_mb * 1024 * 1024;
     let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap_or_default().as_secs();
+
+    let target_dirs: Vec<PathBuf> = if let Some(ref path_str) = target_path {
+        let p = PathBuf::from(path_str);
+        if p.exists() {
+            vec![p]
+        } else {
+            Vec::new()
+        }
+    } else {
+        let home = get_home_dir();
+        let mut dirs = vec![
+            home.join("Downloads"),
+            home.join("Documents"),
+            home.join("Desktop"),
+            home.join("Movies"),
+            home.join("Music"),
+            home.join("Pictures"),
+        ];
+
+        // Also scan connected external volumes when scanning all
+        #[cfg(target_os = "macos")]
+        {
+            if let Ok(entries) = fs::read_dir("/Volumes") {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    let name = entry.file_name().to_string_lossy().to_string();
+                    if path.is_dir() && !name.starts_with('.') && name != "Macintosh HD" {
+                        dirs.push(path);
+                    }
+                }
+            }
+        }
+
+        dirs
+    };
 
     let mut large_files: Vec<LargeFileInfo> = target_dirs
         .par_iter()
@@ -529,13 +613,13 @@ pub fn scan_large_files(min_size_mb: u64) -> Vec<LargeFileInfo> {
 
             let mut dir_files = Vec::new();
             for entry in WalkDir::new(dir)
-                .max_depth(4)
+                .max_depth(5)
                 .follow_links(false)
                 .into_iter()
                 .filter_entry(|e| {
                     let name = e.file_name().to_string_lossy();
                     // Skip hidden folders, node_modules, git, and Library
-                    if e.depth() > 0 && (name.starts_with('.') || name == "node_modules" || name == "Library" || name == "target" || name == "dist") {
+                    if e.depth() > 0 && (name.starts_with('.') || name == "node_modules" || name == "Library" || name == "target" || name == "dist" || name == "$RECYCLE.BIN" || name == ".Trashes") {
                         return false;
                     }
                     true
