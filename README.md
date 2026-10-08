@@ -96,8 +96,8 @@ graph TD
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/uchitchakma/myMacCleaner.git
-cd myMacCleaner
+git clone https://github.com/uchitchakma/myOSCleaner.git
+cd myOSCleaner
 
 # Install frontend dependencies
 bun install

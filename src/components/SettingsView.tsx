@@ -121,7 +121,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </div>
 
             <a
-              href="https://github.com/uchitchakma/myMacCleaner"
+              href="https://github.com/uchitchakma/myOSCleaner"
               target="_blank"
               rel="noreferrer"
               className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/10 transition-all flex items-center gap-1.5"
