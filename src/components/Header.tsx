@@ -44,7 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'trash-bins':
         return {
           title: 'Trash Bins & Discarded Files',
-          subtitle: 'Clean macOS trash cans and external hard drive trashes safely',
+          subtitle: 'Clean system trash cans and external hard drive trashes safely',
         };
       case 'large-files':
         return {
@@ -69,7 +69,7 @@ export const Header: React.FC<HeaderProps> = ({
       case 'settings':
         return {
           title: 'Application Preferences & Info',
-          subtitle: 'Safety protections, open source license, and cross-platform settings',
+          subtitle: 'Safety protections, developer portfolio, and cross-platform settings',
         };
     }
   };
@@ -77,22 +77,22 @@ export const Header: React.FC<HeaderProps> = ({
   const { title, subtitle } = getTabTitle(activeTab);
 
   return (
-    <header className="h-16 px-6 flex items-center justify-between border-b border-white/10 dark:border-slate-800/80 bg-slate-900/40 backdrop-blur-md select-none transition-colors">
+    <header className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#0d121f]/80 backdrop-blur-md select-none transition-colors">
       <div>
-        <h2 className="text-lg font-bold text-white tracking-tight font-sans flex items-center gap-2">
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight font-sans flex items-center gap-2">
           {title}
         </h2>
-        <p className="text-xs text-slate-400 truncate max-w-lg">{subtitle}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg">{subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3">
         {/* System Pill */}
         {systemOverview && (
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-white/5 text-xs text-slate-300">
-            <Laptop className="w-3.5 h-3.5 text-blue-400" />
-            <span className="font-semibold text-white">{systemOverview.os_name} {systemOverview.os_version}</span>
-            <span className="text-slate-500">•</span>
-            <span className="text-slate-400">{systemOverview.arch}</span>
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-white/5 text-xs text-slate-700 dark:text-slate-300">
+            <Laptop className="w-3.5 h-3.5 text-[#C5453E]" />
+            <span className="font-semibold text-slate-900 dark:text-white">{systemOverview.os_name} {systemOverview.os_version}</span>
+            <span className="text-slate-400 dark:text-slate-500">•</span>
+            <span className="text-slate-500 dark:text-slate-400">{systemOverview.arch}</span>
           </div>
         )}
 
@@ -100,10 +100,10 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           onClick={onQuickOptimizeRam}
           disabled={isOptimizingRam}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 hover:text-purple-200 border border-purple-500/30 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#C5453E]/10 hover:bg-[#C5453E]/20 text-[#C5453E] border border-[#C5453E]/30 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
           title="Flush Inactive Memory Pages"
         >
-          <Zap className={`w-3.5 h-3.5 text-purple-400 ${isOptimizingRam ? 'animate-bounce' : ''}`} />
+          <Zap className={`w-3.5 h-3.5 text-[#C5453E] ${isOptimizingRam ? 'animate-bounce' : ''}`} />
           <span>{isOptimizingRam ? 'Optimizing...' : 'Purge RAM'}</span>
         </button>
 
@@ -111,22 +111,22 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           onClick={onRefresh}
           disabled={isRefreshing}
-          className="p-2 rounded-xl bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/5 transition-all active:scale-95 disabled:opacity-50"
+          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/70 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5 transition-all active:scale-95 disabled:opacity-50"
           title="Refresh System Status"
         >
-          <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-blue-400' : ''}`} />
+          <RotateCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-[#C5453E]' : ''}`} />
         </button>
 
         {/* Dark/Light mode toggle */}
         <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="p-2 rounded-xl bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/5 transition-all active:scale-95"
+          className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800/70 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/5 transition-all active:scale-95"
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
           {theme === 'dark' ? (
             <Sun className="w-4 h-4 text-amber-400" />
           ) : (
-            <Moon className="w-4 h-4 text-indigo-400" />
+            <Moon className="w-4 h-4 text-indigo-500" />
           )}
         </button>
       </div>

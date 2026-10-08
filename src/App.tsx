@@ -36,14 +36,13 @@ export const App: React.FC = () => {
   const [installedApps, setInstalledApps] = useState<AppInfo[]>([]);
   const [developerProjects, setDeveloperProjects] = useState<DeveloperProjectInfo[]>([]);
 
-  // Loading states
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
+  // Scanning & cleaning states
+  const [scannedTabs, setScannedTabs] = useState<Set<string>>(new Set());
+  const [scanningTabs, setScanningTabs] = useState<Set<string>>(new Set());
+  const [isRefreshingOverview, setIsRefreshingOverview] = useState(false);
+  const [isScanningAll, setIsScanningAll] = useState(false);
   const [isCleaning, setIsCleaning] = useState(false);
   const [isOptimizingRam, setIsOptimizingRam] = useState(false);
-
-  // Tab loaded cache
-  const [loadedTabs, setLoadedTabs] = useState<Set<string>>(new Set(['smart-scan']));
 
   // Toast notifications
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'info' | 'error' } | null>(null);
@@ -55,7 +54,7 @@ export const App: React.FC = () => {
     }, 4000);
   };
 
-  // 1. Instant Initial Load
+  // 1. Instant System Overview (Hardware stats < 5ms)
   const initOverview = async () => {
     try {
       const overview = await tauri.fetchSystemOverview();
@@ -65,8 +64,9 @@ export const App: React.FC = () => {
     }
   };
 
-  // 2. Load tab data on demand
-  const loadTabData = useCallback(async (tab: NavTab) => {
+  // 2. On-Demand Scan per Tab
+  const scanTab = useCallback(async (tab: NavTab) => {
+    setScanningTabs((prev) => new Set(prev).add(tab));
     try {
       if (tab === 'system-junk' || tab === 'smart-scan') {
         const junk = await tauri.fetchSystemJunk();
@@ -88,21 +88,23 @@ export const App: React.FC = () => {
         const dev = await tauri.fetchDeveloperProjects();
         setDeveloperProjects(dev);
       }
-      setLoadedTabs((prev) => new Set(prev).add(tab));
+      setScannedTabs((prev) => new Set(prev).add(tab));
     } catch (err) {
-      console.error(`Error loading data for ${tab}:`, err);
+      console.error(`Error scanning tab ${tab}:`, err);
+      showToast(`Failed to scan ${tab}`, 'error');
+    } finally {
+      setScanningTabs((prev) => {
+        const next = new Set(prev);
+        next.delete(tab);
+        return next;
+      });
     }
   }, []);
 
   useEffect(() => {
     initOverview();
-    // Pre-fetch trash & junk in background after initial render
-    setTimeout(() => {
-      loadTabData('system-junk');
-      loadTabData('trash-bins');
-    }, 100);
 
-    // RAM & CPU refresh interval
+    // Fast RAM & CPU hardware monitor refresh interval
     const interval = setInterval(async () => {
       try {
         const overview = await tauri.fetchSystemOverview();
@@ -113,34 +115,29 @@ export const App: React.FC = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [loadTabData]);
+  }, []);
 
-  // When active tab changes, load if not loaded yet
-  useEffect(() => {
-    if (!loadedTabs.has(activeTab)) {
-      loadTabData(activeTab);
-    }
-  }, [activeTab, loadedTabs, loadTabData]);
-
-  // Full Refresh
+  // Full Global Refresh
   const handleFullRefresh = async () => {
-    setIsRefreshing(true);
+    setIsRefreshingOverview(true);
     try {
       const overview = await tauri.fetchSystemOverview();
       setSystemOverview(overview);
-      await loadTabData(activeTab);
-      showToast('System data refreshed', 'info');
+      if (scannedTabs.has(activeTab)) {
+        await scanTab(activeTab);
+      }
+      showToast('System status refreshed', 'info');
     } catch (err) {
       console.error(err);
       showToast('Refresh error', 'error');
     } finally {
-      setIsRefreshing(false);
+      setIsRefreshingOverview(false);
     }
   };
 
-  // Smart Scan (Scans everything in parallel)
+  // Smart Scan (Scans all modules in parallel on-demand)
   const handleStartSmartScan = async () => {
-    setIsScanning(true);
+    setIsScanningAll(true);
     try {
       const [overview, junk, trash, files, apps, dev] = await Promise.all([
         tauri.fetchSystemOverview(),
@@ -157,13 +154,13 @@ export const App: React.FC = () => {
       setLargeFiles(files);
       setInstalledApps(apps);
       setDeveloperProjects(dev);
-      setLoadedTabs(new Set(['smart-scan', 'system-junk', 'trash-bins', 'large-files', 'uninstaller', 'developer']));
+      setScannedTabs(new Set(['smart-scan', 'system-junk', 'trash-bins', 'large-files', 'uninstaller', 'developer']));
       showToast('Smart Scan Complete!', 'success');
     } catch (e) {
       console.error(e);
-      showToast('Scan encountered an error', 'error');
+      showToast('Smart Scan encountered an issue', 'error');
     } finally {
-      setIsScanning(false);
+      setIsScanningAll(false);
     }
   };
 
@@ -179,6 +176,7 @@ export const App: React.FC = () => {
         ]);
         setSystemOverview(overview);
         setJunkCategories(junk);
+        setScannedTabs((prev) => new Set(prev).add('system-junk'));
         return result;
       } else {
         showToast('Clean completed with warnings', 'error');
@@ -204,6 +202,7 @@ export const App: React.FC = () => {
       ]);
       setSystemOverview(overview);
       setTrashItems(trash);
+      setScannedTabs((prev) => new Set(prev).add('trash-bins'));
       return res;
     } catch (err) {
       console.error(err);
@@ -225,6 +224,7 @@ export const App: React.FC = () => {
       ]);
       setSystemOverview(overview);
       setLargeFiles(files);
+      setScannedTabs((prev) => new Set(prev).add('large-files'));
       return res;
     } catch (err) {
       console.error(err);
@@ -246,6 +246,7 @@ export const App: React.FC = () => {
       ]);
       setSystemOverview(overview);
       setInstalledApps(apps);
+      setScannedTabs((prev) => new Set(prev).add('uninstaller'));
       return res;
     } catch (err) {
       console.error(err);
@@ -267,6 +268,7 @@ export const App: React.FC = () => {
       ]);
       setSystemOverview(overview);
       setInstalledApps(apps);
+      setScannedTabs((prev) => new Set(prev).add('uninstaller'));
       return res;
     } catch (err) {
       console.error(err);
@@ -288,6 +290,7 @@ export const App: React.FC = () => {
       ]);
       setSystemOverview(overview);
       setDeveloperProjects(dev);
+      setScannedTabs((prev) => new Set(prev).add('developer'));
       return res;
     } catch (err) {
       console.error(err);
@@ -327,7 +330,7 @@ export const App: React.FC = () => {
   const totalJunkCount = junkCategories.reduce((acc, cat) => acc + cat.item_count, 0) + trashItems.length;
 
   return (
-    <div className={`h-screen w-screen flex bg-slate-950 text-slate-100 overflow-hidden font-sans ${theme}`}>
+    <div className={`h-screen w-screen flex bg-[#f4f6f9] dark:bg-[#090d16] text-slate-900 dark:text-slate-100 overflow-hidden font-sans ${theme}`}>
       {/* Sidebar Navigation */}
       <Sidebar
         activeTab={activeTab}
@@ -337,13 +340,13 @@ export const App: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden bg-slate-950 dark:bg-slate-950 transition-colors">
+      <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#f4f6f9] dark:bg-[#090d16] transition-colors">
         {/* Top Header */}
         <Header
           activeTab={activeTab}
           systemOverview={systemOverview}
           onRefresh={handleFullRefresh}
-          isRefreshing={isRefreshing}
+          isRefreshing={isRefreshingOverview}
           theme={theme}
           setTheme={setTheme}
           onQuickOptimizeRam={handleOptimizeRam}
@@ -357,7 +360,7 @@ export const App: React.FC = () => {
               systemOverview={systemOverview}
               junkCategories={junkCategories}
               onStartScan={handleStartSmartScan}
-              isScanning={isScanning}
+              isScanning={isScanningAll}
               onExecuteClean={handleCleanJunkPaths}
               isCleaning={isCleaning}
               onNavigateTab={setActiveTab}
@@ -369,8 +372,9 @@ export const App: React.FC = () => {
               categories={junkCategories}
               onCleanSelected={handleCleanJunkPaths}
               isCleaning={isCleaning}
-              onRefresh={() => loadTabData('system-junk')}
-              isRefreshing={isRefreshing}
+              onRefresh={() => scanTab('system-junk')}
+              isRefreshing={scanningTabs.has('system-junk')}
+              hasScanned={scannedTabs.has('system-junk')}
             />
           )}
 
@@ -379,10 +383,11 @@ export const App: React.FC = () => {
               trashItems={trashItems}
               onEmptyTrash={handleEmptyTrash}
               isEmptying={isCleaning}
-              onRefresh={() => loadTabData('trash-bins')}
-              isRefreshing={isRefreshing}
+              onRefresh={() => scanTab('trash-bins')}
+              isRefreshing={scanningTabs.has('trash-bins')}
               onRevealInFinder={handleRevealInFinder}
               onDeleteSingle={(path) => handleCleanJunkPaths([path])}
+              hasScanned={scannedTabs.has('trash-bins')}
             />
           )}
 
@@ -391,9 +396,10 @@ export const App: React.FC = () => {
               files={largeFiles}
               onDeleteFiles={handleDeleteLargeFiles}
               isDeleting={isCleaning}
-              onRefresh={() => loadTabData('large-files')}
-              isRefreshing={isRefreshing}
+              onRefresh={() => scanTab('large-files')}
+              isRefreshing={scanningTabs.has('large-files')}
               onRevealInFinder={handleRevealInFinder}
+              hasScanned={scannedTabs.has('large-files')}
             />
           )}
 
@@ -403,8 +409,9 @@ export const App: React.FC = () => {
               onUninstall={handleUninstallApp}
               onReset={handleResetApp}
               isProcessing={isCleaning}
-              onRefresh={() => loadTabData('uninstaller')}
-              isRefreshing={isRefreshing}
+              onRefresh={() => scanTab('uninstaller')}
+              isRefreshing={scanningTabs.has('uninstaller')}
+              hasScanned={scannedTabs.has('uninstaller')}
             />
           )}
 
@@ -413,9 +420,10 @@ export const App: React.FC = () => {
               projects={developerProjects}
               onCleanFolders={handleCleanDeveloperFolders}
               isCleaning={isCleaning}
-              onRefresh={() => loadTabData('developer')}
-              isRefreshing={isRefreshing}
+              onRefresh={() => scanTab('developer')}
+              isRefreshing={scanningTabs.has('developer')}
               onRevealInFinder={handleRevealInFinder}
+              hasScanned={scannedTabs.has('developer')}
             />
           )}
 
@@ -444,7 +452,7 @@ export const App: React.FC = () => {
         <div className="fixed bottom-6 right-6 z-50 animate-fadeIn">
           <div className="px-4 py-3 rounded-2xl bg-slate-900 border border-white/15 text-white shadow-2xl flex items-center gap-3 text-xs backdrop-blur-lg">
             {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
-            {toast.type === 'error' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
+            {toast.type === 'error' && <AlertTriangle className="w-4 h-4 text-[#C5453E]" />}
             {toast.type === 'info' && <Info className="w-4 h-4 text-cyan-400" />}
             <span className="font-medium">{toast.message}</span>
             <button
@@ -460,3 +468,4 @@ export const App: React.FC = () => {
   );
 };
 export default App;
+

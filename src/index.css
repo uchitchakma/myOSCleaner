@@ -4,10 +4,10 @@
 
 @layer base {
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans select-none overflow-hidden;
+    @apply antialiased font-sans select-none overflow-hidden transition-colors duration-200;
   }
 
-  /* Custom CleanMyMac Glassmorphic Scrollbars */
+  /* Custom Scrollbars */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -18,12 +18,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(197, 69, 62, 0.25);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(197, 69, 62, 0.45);
   }
 }
 
@@ -42,55 +42,84 @@
   animation: fadeIn 0.25s ease-out forwards;
 }
 
-/* Light mode overrides */
+/* Dark theme variables */
+.dark {
+  --bg-app: #090d16;
+  --bg-sidebar: #0d121f;
+  --bg-header: rgba(13, 18, 31, 0.7);
+  --bg-card: #131929;
+  --bg-card-subtle: #182035;
+  --bg-input: #1a233a;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(197, 69, 62, 0.4);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+}
+
+/* Light theme variables */
 .light {
-  color-scheme: light;
+  --bg-app: #f4f6f9;
+  --bg-sidebar: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.85);
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f8fafc;
+  --bg-input: #f1f5f9;
+  --border-color: #e2e8f0;
+  --border-color-hover: rgba(197, 69, 62, 0.5);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+}
+
+/* Base theme application */
+.dark body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
 }
 
 .light body {
-  background-color: #f1f5f9;
-  color: #0f172a;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
 }
 
-.light .bg-slate-950 {
-  background-color: #ffffff !important;
+/* Theme helper utility classes */
+.theme-bg-app {
+  background-color: var(--bg-app);
 }
 
-.light .bg-slate-900\/90,
-.light .bg-slate-900\/60,
-.light .bg-slate-900\/50,
-.light .bg-slate-900\/40,
-.light .bg-slate-900 {
-  background-color: #f8fafc !important;
+.theme-bg-sidebar {
+  background-color: var(--bg-sidebar);
 }
 
-.light .border-white\/10,
-.light .border-white\/5,
-.light .border-white\/20 {
-  border-color: #e2e8f0 !important;
+.theme-bg-header {
+  background-color: var(--bg-header);
 }
 
-.light .text-white {
-  color: #0f172a !important;
+.theme-bg-card {
+  background-color: var(--bg-card);
 }
 
-.light .text-slate-200,
-.light .text-slate-300 {
-  color: #1e293b !important;
+.theme-bg-card-subtle {
+  background-color: var(--bg-card-subtle);
 }
 
-.light .text-slate-400 {
-  color: #475569 !important;
+.theme-bg-input {
+  background-color: var(--bg-input);
 }
 
-.light .text-slate-500 {
-  color: #64748b !important;
+.theme-border {
+  border-color: var(--border-color);
 }
 
-.light .bg-slate-800,
-.light .bg-slate-800\/80,
-.light .bg-slate-800\/70,
-.light .bg-slate-800\/60,
-.light .bg-slate-800\/40 {
-  background-color: #e2e8f0 !important;
+.theme-text-primary {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
 }
