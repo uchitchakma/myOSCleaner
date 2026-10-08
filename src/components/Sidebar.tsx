@@ -93,10 +93,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const ramUsagePct = systemOverview?.memory_usage_percent || 0;
 
   return (
-    <aside className="w-64 flex flex-col justify-between h-full bg-white/80 dark:bg-[#0c111e]/85 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 select-none p-3.5 transition-colors shadow-lg z-20">
+    <aside className="w-64 flex flex-col justify-between h-full bg-white/80 dark:bg-[#0c111e]/85 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 select-none p-3.5 pt-8 transition-colors shadow-lg z-20">
       <div>
-        {/* 3D App Title Header */}
-        <div className="flex items-center gap-3 px-2 py-3 mb-2 group cursor-default">
+        {/* 3D App Title Header with Drag Region */}
+        <div
+          data-tauri-drag-region
+          className="flex items-center gap-3 px-2 py-2 mb-2 group cursor-default"
+        >
           <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl shadow-[0_8px_20px_rgba(197,69,62,0.35)] transition-transform duration-300 group-hover:scale-105">
             <img
               src="/app-icon.png"

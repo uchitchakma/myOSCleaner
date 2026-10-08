@@ -77,14 +77,17 @@ export const Header: React.FC<HeaderProps> = ({
   const { title, subtitle } = getTabTitle(activeTab);
 
   return (
-    <header className="h-16 px-6 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-white/75 dark:bg-[#0c111e]/75 backdrop-blur-2xl select-none transition-colors relative z-10">
-      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent" />
+    <header
+      data-tauri-drag-region
+      className="h-18 px-6 flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-white/75 dark:bg-[#0c111e]/75 backdrop-blur-2xl select-none transition-colors relative z-10 cursor-default"
+    >
+      <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/80 dark:via-white/20 to-transparent pointer-events-none" />
 
-      <div>
-        <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight font-sans flex items-center gap-2">
+      <div data-tauri-drag-region className="flex-1 py-2">
+        <h2 data-tauri-drag-region className="text-lg font-black text-slate-900 dark:text-white tracking-tight font-sans flex items-center gap-2">
           {title}
         </h2>
-        <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg font-medium">{subtitle}</p>
+        <p data-tauri-drag-region className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-lg font-medium">{subtitle}</p>
       </div>
 
       <div className="flex items-center gap-3">

@@ -12,14 +12,16 @@
   "app": {
     "windows": [
       {
-        "title": "myOSCleaner | Universal Smart System Cleaner & Space Optimizer",
+        "title": "myOSCleaner",
         "width": 1180,
         "height": 780,
         "minWidth": 940,
         "minHeight": 650,
         "resizable": true,
         "center": true,
-        "decorations": true
+        "decorations": true,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true
       }
     ],
     "security": {
