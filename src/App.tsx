@@ -114,7 +114,7 @@ export const App: React.FC = () => {
         return next;
       });
     }
-  }, []);
+  }, [largeFilesDrive]);
 
   useEffect(() => {
     initOverview();

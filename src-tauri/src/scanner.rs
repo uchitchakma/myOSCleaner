@@ -571,7 +571,17 @@ pub fn scan_large_files(min_size_mb: u64, target_path: Option<String>) -> Vec<La
 
     let target_dirs: Vec<PathBuf> = if let Some(ref path_str) = target_path {
         let p = PathBuf::from(path_str);
-        if p.exists() {
+        if path_str == "/" || path_str == "C:\\" || path_str == "C:/" {
+            let home = get_home_dir();
+            vec![
+                home.join("Downloads"),
+                home.join("Documents"),
+                home.join("Desktop"),
+                home.join("Movies"),
+                home.join("Music"),
+                home.join("Pictures"),
+            ]
+        } else if p.exists() {
             vec![p]
         } else {
             Vec::new()

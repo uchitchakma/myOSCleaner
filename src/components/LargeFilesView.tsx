@@ -55,6 +55,22 @@ export const LargeFilesView: React.FC<LargeFilesViewProps> = ({
 
   // Filter items
   const filteredFiles = files.filter((file) => {
+    // Filter by target drive
+    if (selectedDrive) {
+      const isInternalRoot = selectedDrive === '/' || selectedDrive === 'C:\\' || selectedDrive === 'C:/';
+      if (isInternalRoot) {
+        // Internal drive: exclude external volume mount points
+        if (file.path.startsWith('/Volumes/') || file.path.startsWith('/media/') || file.path.startsWith('/mnt/')) {
+          return false;
+        }
+      } else {
+        // External drive: must start with the selected drive mount point
+        if (!file.path.startsWith(selectedDrive)) {
+          return false;
+        }
+      }
+    }
+
     if (searchTerm && !file.name.toLowerCase().includes(searchTerm.toLowerCase()) && !file.path.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
